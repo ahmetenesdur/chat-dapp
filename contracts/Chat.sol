@@ -121,17 +121,21 @@ contract Chat {
     }
 
     // Function to send a message
-    function sendMessage(address friendKey, string calldata _msg) external {
+    function sendMessage(address friendKey, string calldata _message) external {
         require(checkUserExists(msg.sender), "Create an account first");
-        require(checkUserExists(friendKey), "User is not registered");
+        require(checkUserExists(friendKey), "User is not registered!");
         require(
             checkAlreadyFriends(msg.sender, friendKey),
-            "You are not friend with the given user"
+            "These users are not friends"
         );
 
         bytes32 chatCode = _getChatCode(msg.sender, friendKey);
-        message memory newMsg = message(msg.sender, block.timestamp, _msg);
-        allMessages[chatCode].push(newMsg);
+        message memory newMessage = message(
+            msg.sender,
+            block.timestamp,
+            _message
+        );
+        allMessages[chatCode].push(newMessage);
     }
 
     // Function to read messages
@@ -142,6 +146,7 @@ contract Chat {
         return allMessages[chatCode];
     }
 
+    // Function to get all user
     function getAllAppUser() public view returns (AllUserStruck[] memory) {
         return getAllUsers;
     }
