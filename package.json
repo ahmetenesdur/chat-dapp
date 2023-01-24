@@ -11,14 +11,17 @@
   "dependencies": {
     "@next/font": "13.1.5",
     "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+    "@rainbow-me/rainbowkit": "^0.8.1",
     "dotenv": "^16.0.3",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.5",
+    "ethers": "^5.7.2",
     "fs-extra": "^11.1.0",
     "hardhat": "^2.12.6",
     "next": "13.1.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "wagmi": "^0.9.6"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
