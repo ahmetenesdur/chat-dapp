@@ -6,6 +6,8 @@ import { mainnet, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
+import NavBar from "@/components/NavBar";
+
 const { chains, provider } = configureChains(
   [goerli],
   [
@@ -29,6 +31,7 @@ export default function App({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
+        <NavBar />
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
