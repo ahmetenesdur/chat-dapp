@@ -47,7 +47,6 @@ const NavBar = () => {
     <div className="sm:relative sm:w-4/5 sm:m-8 w-11/12 m-8 text-white sm:mx-auto">
       <div className="flex sm:items-center justify-between sm:gap-8 gap-4 sm:py-4 py-2 sm:px-4 px-2">
         <div className="flex">
-          {/*  Logo Image and link to home page */}
           <div className="sm:block hidden">
             <Link href="/">
               <Image src={images.logo} alt="logo" width={50} height={50} />
@@ -55,7 +54,7 @@ const NavBar = () => {
           </div>
         </div>
         <div className="sm:flex sm:justify-between sm:items-center gap-4 ">
-          {/* // Desktop */}
+          {/* Desktop */}
           <div className="sm:flex sm:items-center sm:gap-8 sm:border-b-2 sm:border-solid sm:border-transparent sm:transition-all sm:duration-300 sm:ease-in-out hidden">
             {menuItems.map((el, i) => (
               <div
@@ -79,13 +78,13 @@ const NavBar = () => {
                 <div
                   onClick={() => setActive(i + 1)}
                   key={i + 1}
-                  className={`${"mt-4"} ${active == i + 1 ? "pt-8" : ""}`}
+                  className={`${"mt-4"} ${active == i + 1 ? "color-[#F18303] border-b-2 border-solid border-[#F18303] pb-2 " : ""}`}
                 >
                   <Link href={el.link}>{el.menu}</Link>
                 </div>
               ))}
 
-              <p className="pt-8">
+              <div className="absolute top-0 right-0 mt-4 mr-4">
                 <Image
                   src={images.close}
                   alt="close"
@@ -93,7 +92,7 @@ const NavBar = () => {
                   height={50}
                   onClick={() => setOpen(false)}
                 />
-              </p>
+              </div>
             </div>
           )}
 
