@@ -2,9 +2,10 @@ import React, { useState, useContext } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 
 //Internal Imports
-// import { ChatAppContext } from "../../Context/ChatAppContext";
+import { ChatAppContext } from "../context/ChatAppContext";
 // import Error from "./Error";
 import images from "../public/assets";
 
@@ -41,19 +42,20 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
-  // const { account, userName, connectWallet, error } =
-  //   useContext(ChatAppContext);
+  const { address, isConnected } = useAccount();
+  const { userName, error } = useContext(ChatAppContext);
+
   return (
-    <div className="sm:relative sm:w-4/5 sm:m-8 w-11/12 m-8 text-white sm:mx-auto">
-      <div className="flex sm:items-center justify-between sm:gap-8 gap-4 sm:py-4 py-2 sm:px-4 px-2">
+    <div className="sm:relative sm:w-4/5 sm:m-8 sm:mx-auto text-white w-11/12 m-8 mx-auto">
+      <div className="flex justify-between sm:items-center sm:gap-8 sm:px-4  sm:py-4 gap-4 py-2 px-2">
         <div className="flex">
-          <div className="sm:block hidden">
+          <div className="sm:block">
             <Link href="/">
               <Image src={images.logo} alt="logo" width={50} height={50} />
             </Link>
           </div>
         </div>
-        <div className="sm:flex sm:justify-between sm:items-center gap-4 ">
+        <div className="flex justify-between items-center gap-4">
           {/* Desktop */}
           <div className="sm:flex sm:items-center sm:gap-8 sm:border-b-2 sm:border-solid sm:border-transparent sm:transition-all sm:duration-300 sm:ease-in-out hidden">
             {menuItems.map((el, i) => (
@@ -73,36 +75,57 @@ const NavBar = () => {
 
           {/* Mobile */}
           {open && (
-            <div className="block fixed z-50 bg-[#292F3F] inset-0 text-center pt-16 sm:hidden">
+            <div className="sm:hidden block fixed z-50 bg-[#292F3F] inset-0 text-center pt-16 ">
               {menuItems.map((el, i) => (
                 <div
                   onClick={() => setActive(i + 1)}
                   key={i + 1}
-                  className={`${"mt-4"} ${active == i + 1 ? "color-[#F18303] border-b-2 border-solid border-[#F18303] pb-2 " : ""}`}
+                  className={`${"mt-4"} ${
+                    active == i + 1
+                      ? "color-[#F18303] border-b-2 border-solid border-[#F18303] pb-2 "
+                      : ""
+                  }`}
                 >
                   <Link href={el.link}>{el.menu}</Link>
                 </div>
               ))}
 
-              <div className="absolute top-0 right-0 mt-4 mr-4">
+              <div className="absolute top-0 right-0 mt-4 mr-4 cursor-pointer">
                 <Image
                   src={images.close}
                   alt="close"
-                  width={50}
-                  height={50}
+                  width={45}
+                  height={45}
                   onClick={() => setOpen(false)}
                 />
               </div>
             </div>
           )}
 
-          {/* CONNECT WALLET */}
-          <div className="flex justify-self-end">
-            <ConnectButton />
+          {/* Connect Wallet */}
+          <div className="flex justify-self-end sm:block">
+            {!isConnected ? (
+              <ConnectButton />
+            ) : (
+              <button onClick={() => setOpenModel(true)}>
+                {""}
+                <Image
+                  src={ images.create2}
+                  alt="Account image"
+                  width={20}
+                  height={20}
+                />
+                {""}
+                <small>{ "Create Account"}</small>
+              </button>
+            )}
           </div>
 
-          <div className="sm:hidden block" onClick={() => setOpen(true)}>
-            <Image src={images.open} alt="open" width={30} height={30} />
+          <div
+            className="sm:hidden block cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            <Image src={images.open} alt="open" width={35} height={35} />
           </div>
         </div>
       </div>
