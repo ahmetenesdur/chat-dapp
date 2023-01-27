@@ -1,10 +1,9 @@
 import React, { useState, useContext } from "react";
 import Image from "next/image";
 
-//INTERNAL IMPORT
-import images from "../../assets";
-import { ChatAppContect } from "../../Context/ChatAppContext";
-import { Loader } from "../../Components/index";
+import images from "../public/assets";
+import { ChatAppContext } from "../Context/ChatAppContext";
+import Loader from "./Loader";
 
 const Model = ({
   openBox,
@@ -16,29 +15,29 @@ const Model = ({
   image,
   functionName,
 }) => {
-  //USESTATE
+  // UseState
   const [name, setName] = useState("");
   const [accountAddress, setAccountAddress] = useState("");
 
-  const { loading } = useContext(ChatAppContect);
+  const { loading } = useContext(ChatAppContext);
   return (
-    <div>
-      <div>
+    <div className="w-[%95] sm:w-[%85] sm:m-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:items-center">
         <div>
           <Image src={image} alt="buddy" width={700} height={700} />
         </div>
         <div>
-          <h1>
+          <h1 className="text-sm leading-4 sm:text-5xl sm:text-[#F18303] ">
             {title} <span>{head}</span>
           </h1>
-          <p>{info}</p>
-          <small>{smallInfo}</small>
+          <p className="text-4xl sm:block sm:text-7xl">{info}</p>
+          <small className="text-xl text-[#F18303]">{smallInfo}</small>
 
           {loading == true ? (
             <Loader />
           ) : (
             <div>
-              <div>
+              <div className="">
                 <Image
                   src={images.username}
                   alt="user"
@@ -72,7 +71,7 @@ const Model = ({
                   {""}
                   <Image src={images.close} alt="send" width={30} height={30} />
                   {""}
-                  Cancle
+                  Cancel
                 </button>
               </div>
             </div>

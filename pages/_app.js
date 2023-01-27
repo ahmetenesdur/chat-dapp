@@ -6,6 +6,7 @@ import { mainnet, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
+import { ChatAppProvider } from "../context/ChatAppContext";
 import NavBar from "@/components/NavBar";
 
 const { chains, provider } = configureChains(
@@ -31,8 +32,10 @@ export default function App({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <NavBar />
-        <Component {...pageProps} />
+        <ChatAppProvider>
+          <NavBar />
+          <Component {...pageProps} />
+        </ChatAppProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

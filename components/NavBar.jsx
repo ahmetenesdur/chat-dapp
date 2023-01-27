@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 
-//Internal Imports
 import { ChatAppContext } from "../context/ChatAppContext";
+import Model from "./Model";
 // import Error from "./Error";
 import images from "../public/assets";
 
@@ -43,7 +43,8 @@ const NavBar = () => {
   const [openModel, setOpenModel] = useState(false);
 
   const { address, isConnected } = useAccount();
-  const { userName, error } = useContext(ChatAppContext);
+  const { account, userName, createAccount, error } =
+    useContext(ChatAppContext);
 
   return (
     <div className="sm:relative sm:w-4/5 sm:m-8 sm:mx-auto text-white w-11/12 m-8 mx-auto">
@@ -103,20 +104,23 @@ const NavBar = () => {
           )}
 
           {/* Connect Wallet */}
-          <div className="flex justify-self-end sm:block">
+          <div className="flex justify-self-end">
             {!isConnected ? (
               <ConnectButton />
             ) : (
-              <button onClick={() => setOpenModel(true)}>
+              <button
+                className="bg-[#000000]/25 p-4 border-none rounded-lg font-bold text-[#F18303] cursor-pointer flex text-center gap-2"
+                onClick={() => setOpenModel(true)}
+              >
                 {""}
                 <Image
-                  src={ images.create2}
+                  src={userName ? images.accountName : images.create2}
                   alt="Account image"
                   width={20}
                   height={20}
                 />
                 {""}
-                <small>{ "Create Account"}</small>
+                <small>{userName || "Create Account"}</small>
               </button>
             )}
           </div>
@@ -131,8 +135,8 @@ const NavBar = () => {
       </div>
 
       {/* Model Component */}
-      {/* {openModel && (
-        <div className={Style.modelBox}>
+      {openModel && (
+        <div className="sm:fixed sm:inset-0 bg-[#292F3F] z-50 absolute bottom-3/4">
           {
             <Model
               openBox={setOpenModel}
@@ -146,7 +150,7 @@ const NavBar = () => {
             />
           }
         </div>
-      )} */}
+      )}
       {/* {error == "" ? "" : <Error error={error} />} */}
     </div>
   );

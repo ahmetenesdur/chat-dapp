@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 
-//INTERNAL IMPORT
-import {
-  ChechIfWalletConnected,
-  connectWallet,
-  connectingWithContract,
-} from "../Utils/apiFeature";
+import getContract from "../utils/getContract";
 
 export const ChatAppContext = React.createContext();
 
 export const ChatAppProvider = ({ children }) => {
+  const { address, isConnected } = useAccount();
+
   //USESTATE
   const [account, setAccount] = useState("");
   const [userName, setUserName] = useState("");
@@ -30,12 +28,11 @@ export const ChatAppProvider = ({ children }) => {
   const fetchData = async () => {
     try {
       //GET CONTRACT
-      const contract = await connectingWithContract();
+      const contract = await getContract();
       //GET ACCOUNT
-      const connectAccount = await connectWallet();
-      setAccount(connectAccount);
+      setAccount(address);
       //GET USER NAME
-      const userName = await contract.getUsername(connectAccount);
+      const userName = await contract.getUsername(address);
       setUserName(userName);
       //GET MY FRIEND LIST
       const friendLists = await contract.getMyFriendList();
@@ -55,7 +52,7 @@ export const ChatAppProvider = ({ children }) => {
   //READ MESSAGE
   const readMessage = async (friendAddress) => {
     try {
-      const contract = await connectingWithContract();
+      const contract = await getContract();
       const read = await contract.readMessage(friendAddress);
       setFriendMsg(read);
     } catch (error) {
@@ -67,9 +64,9 @@ export const ChatAppProvider = ({ children }) => {
   const createAccount = async ({ name, accountAddress }) => {
     try {
       // if (name || accountAddress)
-      //   return setError("Name And AccountAddress, cannot be emty");
+      //   return setError("Name And AccountAddress, cannot be empty");
 
-      const contract = await connectingWithContract();
+      const contract = await getContract();
       const getCreatedUser = await contract.createAccount(name);
       setLoading(true);
       await getCreatedUser.wait();
@@ -85,7 +82,7 @@ export const ChatAppProvider = ({ children }) => {
     try {
       // if (name || accountAddress) return setError("Please provide data");
 
-      const contract = await connectingWithContract();
+      const contract = await getContract();
       const addMyFriend = await contract.addFriend(accountAddress, name);
       setLoading(true);
       await addMyFriend.wait();
@@ -102,7 +99,7 @@ export const ChatAppProvider = ({ children }) => {
     try {
       // if (msg || address) return setError("Please Type your Message");
 
-      const contract = await connectingWithContract();
+      const contract = await getContract();
       const addMessage = await contract.sendMessage(address, msg);
       setLoading(true);
       await addMessage.wait();
@@ -115,7 +112,7 @@ export const ChatAppProvider = ({ children }) => {
 
   //READ INFO
   const readUser = async (userAddress) => {
-    const contract = await connectingWithContract();
+    const contract = await getContract();
     const userName = await contract.getUsername(userAddress);
     setCurrentUserName(userName);
     setCurrentUserAddress(userAddress);
@@ -128,8 +125,6 @@ export const ChatAppProvider = ({ children }) => {
         addFriends,
         sendMessage,
         readUser,
-        connectWallet,
-        ChechIfWalletConnected,
         account,
         userName,
         friendLists,
