@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 
 import { ChatAppContext } from "../context/ChatAppContext";
 import Model from "./Model";
-// import Error from "./Error";
+import Error from "./Error";
 import images from "../public/assets";
 
 const NavBar = () => {
@@ -47,7 +47,7 @@ const NavBar = () => {
     useContext(ChatAppContext);
 
   return (
-    <div className="sm:relative sm:w-4/5 sm:m-8 sm:mx-auto text-white w-11/12 m-8 mx-auto">
+    <div className="sm:relative sm:w-4/5 sm:mx-auto text-white w-11/12 m-4 mx-auto">
       <div className="flex justify-between sm:items-center sm:gap-8 sm:px-4  sm:py-4 gap-4 py-2 px-2">
         <div className="flex">
           <div className="sm:block">
@@ -136,14 +136,14 @@ const NavBar = () => {
 
       {/* Model Component */}
       {openModel && (
-        <div className="sm:fixed sm:inset-0 bg-[#292F3F] z-50 absolute bottom-3/4">
+        <div className="sm:fixed inset-0 bg-[#292F3F] z-50 absolute">
           {
             <Model
               openBox={setOpenModel}
               title="WELCOME TO"
               head="CHAT BUDDY"
               info="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate maxime assumenda exercitationem voluptatibus, vero aliquid in tempore aut, impedit dolores voluptate recusandae nulla fuga? Praesentium iusto mollitia sint fugit! Placeat?"
-              smallInfo="Kindley seclet your name..."
+              smallInfo="Secret Key is used to encrypt your messages. Please keep it safe."
               image={images.hero}
               functionName={createAccount}
               address={account}
@@ -151,7 +151,7 @@ const NavBar = () => {
           }
         </div>
       )}
-      {/* {error == "" ? "" : <Error error={error} />} */}
+      {error == "" ? "" : <Error error={error} />}
     </div>
   );
 };

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 
 import getContract from "../utils/getContract";
 
-export const ChatAppContext = React.createContext();
+export const ChatAppContext = createContext();
 
 export const ChatAppProvider = ({ children }) => {
   const { address, isConnected } = useAccount();
@@ -28,7 +28,7 @@ export const ChatAppProvider = ({ children }) => {
   const fetchData = async () => {
     try {
       //GET CONTRACT
-      const contract = await getContract();
+      const contract = getContract();
       //GET ACCOUNT
       setAccount(address);
       //GET USER NAME
@@ -52,7 +52,7 @@ export const ChatAppProvider = ({ children }) => {
   //READ MESSAGE
   const readMessage = async (friendAddress) => {
     try {
-      const contract = await getContract();
+      const contract = getContract();
       const read = await contract.readMessage(friendAddress);
       setFriendMsg(read);
     } catch (error) {
@@ -66,7 +66,7 @@ export const ChatAppProvider = ({ children }) => {
       // if (name || accountAddress)
       //   return setError("Name And AccountAddress, cannot be empty");
 
-      const contract = await getContract();
+      const contract = getContract();
       const getCreatedUser = await contract.createAccount(name);
       setLoading(true);
       await getCreatedUser.wait();
@@ -82,7 +82,7 @@ export const ChatAppProvider = ({ children }) => {
     try {
       // if (name || accountAddress) return setError("Please provide data");
 
-      const contract = await getContract();
+      const contract = getContract();
       const addMyFriend = await contract.addFriend(accountAddress, name);
       setLoading(true);
       await addMyFriend.wait();
@@ -99,7 +99,7 @@ export const ChatAppProvider = ({ children }) => {
     try {
       // if (msg || address) return setError("Please Type your Message");
 
-      const contract = await getContract();
+      const contract = getContract();
       const addMessage = await contract.sendMessage(address, msg);
       setLoading(true);
       await addMessage.wait();
@@ -112,7 +112,7 @@ export const ChatAppProvider = ({ children }) => {
 
   //READ INFO
   const readUser = async (userAddress) => {
-    const contract = await getContract();
+    const contract = getContract();
     const userName = await contract.getUsername(userAddress);
     setCurrentUserName(userName);
     setCurrentUserAddress(userAddress);
