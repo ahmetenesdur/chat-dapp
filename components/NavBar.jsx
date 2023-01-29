@@ -12,8 +12,8 @@ import images from "../public/assets";
 const NavBar = () => {
   const menuItems = [
     {
-      menu: "All Users",
-      link: "/",
+      menu: "All User",
+      link: "/alluser",
     },
     {
       menu: "Chat",
@@ -38,7 +38,7 @@ const NavBar = () => {
   ];
 
   // UseState
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState();
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 

@@ -73,7 +73,7 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(false);
       window.location.reload();
     } catch (error) {
-      setError("Error while creating your account Pleas reload browser");
+      setError("Something went wrong while creating account, try again");
     }
   };
 

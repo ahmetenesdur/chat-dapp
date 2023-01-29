@@ -2,10 +2,9 @@ import React from "react";
 
 const Error = ({ error }) => {
   return (
-    <div>
+    <div className="flex items-center justify-center h-screen">
       <div>
-        <h1>Please Fix This Error & Reload Browser</h1>
-        {error}
+        <h1 className="text-2xl font-bold text-white">{error}</h1>
       </div>
     </div>
   );
