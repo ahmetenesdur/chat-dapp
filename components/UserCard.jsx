@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import images from "../public/assets";
 
 const UserCard = ({ users, i, addFriends }) => {

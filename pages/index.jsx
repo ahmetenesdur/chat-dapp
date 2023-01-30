@@ -1,5 +1,7 @@
 import Head from "next/head";
 
+import Filter from "@/components/Filter";
+
 export default function Home() {
   return (
     <>
@@ -10,7 +12,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-
+        <Filter />
       </main>
     </>
   );

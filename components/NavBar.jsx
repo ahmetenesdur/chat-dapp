@@ -37,7 +37,6 @@ const NavBar = () => {
     },
   ];
 
-  // UseState
   const [active, setActive] = useState();
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);

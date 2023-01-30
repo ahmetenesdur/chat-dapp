@@ -15,12 +15,12 @@ const Model = ({
   image,
   functionName,
 }) => {
-  // UseState
   const [name, setName] = useState("");
   const [accountAddress, setAccountAddress] = useState("");
 
   const { loading } = useContext(ChatAppContext);
   console.log(accountAddress);
+
   return (
     <div className="w-[%90] sm:w-[%80] m-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 sm:items-center">
