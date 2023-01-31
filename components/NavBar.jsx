@@ -37,7 +37,7 @@ const NavBar = () => {
     },
   ];
 
-  const [active, setActive] = useState();
+  const [active, setActive] = useState(2);
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
@@ -58,7 +58,7 @@ const NavBar = () => {
         <div className="flex justify-between items-center gap-4">
           {/* Desktop */}
           <div className="sm:flex sm:items-center sm:gap-8 sm:border-b-2 sm:border-solid sm:border-transparent sm:transition-all sm:duration-300 sm:ease-in-out hidden">
-            {menuItems.map((el, i) => (
+            {menuItems.map((items, i) => (
               <div
                 onClick={() => setActive(i + 1)}
                 key={i + 1}
@@ -68,7 +68,7 @@ const NavBar = () => {
                     : ""
                 }`}
               >
-                <Link href={el.link}>{el.menu}</Link>
+                <Link href={items.link}>{items.menu}</Link>
               </div>
             ))}
           </div>
@@ -76,7 +76,7 @@ const NavBar = () => {
           {/* Mobile */}
           {open && (
             <div className="sm:hidden block fixed z-50 bg-[#292F3F] inset-0 text-center pt-16 ">
-              {menuItems.map((el, i) => (
+              {menuItems.map((items, i) => (
                 <div
                   onClick={() => setActive(i + 1)}
                   key={i + 1}
@@ -86,7 +86,7 @@ const NavBar = () => {
                       : ""
                   }`}
                 >
-                  <Link href={el.link}>{el.menu}</Link>
+                  <Link href={items.link}>{items.menu}</Link>
                 </div>
               ))}
 
