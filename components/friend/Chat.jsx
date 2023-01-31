@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { formatRelative } from "date-fns";
 
 import images from "../../public/assets";
 import Loader from "../Loader";
 
 const Chat = ({
-  functionName,
+  sendMessage,
   readMessage,
   friendMsg,
-  account,
   userName,
   loading,
   currentUserName,
@@ -21,6 +21,9 @@ const Chat = ({
     name: "",
     address: "",
   });
+
+  console.log("chatData => ", chatData);
+  console.log("message => ", message);
 
   const router = useRouter();
 
@@ -42,26 +45,26 @@ const Chat = ({
   };
 
   return (
-    <div className={Style.Chat}>
+    <div className="p-4 sm:p-8 bg-black/25 rounded-lg overflow-auto">
       {currentUserName && currentUserAddress ? (
-        <div className={Style.Chat_user_info}>
+        <div className="flex items-center gap-8 leading-none">
           <Image src={images.accountName} alt="image" width={70} height={70} />
-          <div className={Style.Chat_user_info_box}>
+          <div>
             <h4>{currentUserName}</h4>
-            <p className={Style.show}>{currentUserAddress}</p>
+            <p className="text-xs hidden">{currentUserAddress}</p>
           </div>
         </div>
       ) : (
         ""
       )}
 
-      <div className={Style.Chat_box_box}>
-        <div className={Style.Chat_box}>
-          <div className={Style.Chat_box_left}>
+      <div>
+        <div className="grid grid-cols-1 w-4/5 m-0 overflow-auto h-[50vh]">
+          <div>
             {friendMsg.map((message, i) => (
               <div key={i + 1}>
                 {message.sender == chatData.address ? (
-                  <div className={Style.Chat_box_left_title}>
+                  <div className="flex items-center gap-4 text-base">
                     <Image
                       src={images.accountName}
                       alt="image"
@@ -70,24 +73,29 @@ const Chat = ({
                     />
                     <span>
                       {chatData.name} {""}
-                      <small>Time: {formatDate(message.timestamp)}</small>
+                      <small className="text-xs">
+                        Time: {formatDate(message.timestamp)}
+                      </small>
                     </span>
                   </div>
                 ) : (
-                  <div className={Style.Chat_box_left_title}>
+                  <div className="flex items-center gap-4 text-base">
                     <Image
                       src={images.accountName}
                       alt="image"
                       width={50}
                       height={50}
                     />
-                    <span>
+                    <span className="relative">
                       {userName} {""}
                       <small>Time: {formatDate(message.timestamp)}</small>
                     </span>
                   </div>
                 )}
-                <p key={i + 1}>
+                <p
+                  className="text-xs p-4 relative bg-[#f182035b] rounded-t-lg rounded-bl-lg"
+                  key={i + 1}
+                >
                   {message.msg}
                   {""}
                   {""}
@@ -98,12 +106,13 @@ const Chat = ({
         </div>
 
         {currentUserName && currentUserAddress ? (
-          <div className={Style.Chat_box_send}>
-            <div className={Style.Chat_box_send_img}>
+          <div>
+            <div className="flex items-center gap-4">
               <Image src={images.smile} alt="smile" width={50} height={50} />
               <input
+                className="w-full p-4 text-white rounded-lg bg-[#f182035b] outline-0 border-0"
                 type="text"
-                placeholder="type your message"
+                placeholder="Type a message"
                 onChange={(e) => setMessage(e.target.value)}
               />
               <Image src={images.file} alt="file" width={50} height={50} />
@@ -116,7 +125,7 @@ const Chat = ({
                   width={50}
                   height={50}
                   onClick={() =>
-                    functionName({ msg: message, address: chatData.address })
+                    sendMessage({ msg: message, address: chatData.address })
                   }
                 />
               )}

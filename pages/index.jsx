@@ -1,6 +1,7 @@
 import Head from "next/head";
 
 import Filter from "@/components/Filter";
+import Friend from "../components/friend/Friend";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       </Head>
       <main>
         <Filter />
+        <Friend />
       </main>
     </>
   );

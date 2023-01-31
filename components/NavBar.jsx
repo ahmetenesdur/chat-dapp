@@ -46,7 +46,7 @@ const NavBar = () => {
     useContext(ChatAppContext);
 
   return (
-    <div className="sm:relative sm:w-4/5 sm:mx-auto text-white w-11/12 m-4 mx-auto">
+    <div className="sm:relative sm:w-4/5 text-white w-11/12 m-4 mx-auto">
       <div className="flex justify-between sm:items-center sm:gap-8 sm:px-4  sm:py-4 gap-4 py-2 px-2">
         <div className="flex">
           <div className="sm:block">

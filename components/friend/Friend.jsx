@@ -19,8 +19,8 @@ const Friend = () => {
   } = useContext(ChatAppContext);
 
   return (
-    <div className="sm:relative sm:w-4/5 sm:mx-auto text-white w-11/12 m-4 mx-auto">
-      <div className="grid-cols-1 sm:grid-cols-3 sm:grid sm:gap-8">
+    <div className="sm:w-4/5 text-white w-11/12 m-4 mx-auto">
+      <div className="grid-cols-1 sm:grid-cols-3 grid gap-8">
         <div className="bg-black/25 p-4 rounded-lg">
           {friendLists.map((friends, i) => (
             <Card
@@ -32,9 +32,10 @@ const Friend = () => {
             />
           ))}
         </div>
-        <div>
+        {/* 2 columns will occupy the space. */}
+        <div className="sm:col-span-2">
           <Chat
-            functionName={sendMessage}
+            sendMessage={sendMessage}
             readMessage={readMessage}
             friendMsg={friendMsg}
             account={account}
