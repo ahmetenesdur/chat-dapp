@@ -47,7 +47,7 @@ export const ChatAppProvider = ({ children }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [address]);
 
   // Read Message
   const readMessage = async (friendAddress) => {

@@ -17,7 +17,7 @@ const Card = ({ readMessage, friends, i, readUser }) => {
       <div
         onClick={() => (readMessage(friends.pubkey), readUser(friends.pubkey))}
       >
-        <div className="flex items-center gap-4 cursor-pointer py-4 border-b border-[#f1820342] hover:bg-[#f1820342] rounded-lg overflow-auto">
+        <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#f1820342] hover:bg-[#f1820342] rounded-lg overflow-auto">
           <div className="rounded-lg">
             <Image
               src={images.accountName}
@@ -31,7 +31,7 @@ const Card = ({ readMessage, friends, i, readUser }) => {
               <h4>{friends.name}</h4>
               <small>{friends.pubkey.slice(21)}..</small>
             </div>
-            <div>
+            <div className="flex items-center gap-2">
               <small>{i + 1}</small>
             </div>
           </div>
