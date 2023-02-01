@@ -4,9 +4,10 @@ import Image from "next/image";
 import images from "../public/assets";
 import { ChatAppContext } from "../context/ChatAppContext";
 import Model from "./Model";
+import Friend from "./friend/Friend";
 
 const Filter = () => {
-  const { addFriends, userName } = useContext(ChatAppContext);
+  const { addFriends, userName, setSearch } = useContext(ChatAppContext);
   const [addFriend, setAddFriend] = useState(false);
 
   return (
@@ -19,6 +20,7 @@ const Filter = () => {
               className="bg-transparent p-4 text-white sm:w-80 outline-0 border-0"
               type="text"
               placeholder="Search.."
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
@@ -26,7 +28,7 @@ const Filter = () => {
           <button
             className="text-sm bg-black/25 text-[#66b3e8] rounded-xl font-bold flex items-center gap-2 py-4 px-4 outline-0 border-0 hover:bg-[#30556e] hover:text-white"
             onClick={() => setAddFriend(true)}
-            disabled={ userName ? false : true }
+            disabled={userName ? false : true}
           >
             <Image src={images.user} alt="users" width={20} height={20} />
             Add Friends

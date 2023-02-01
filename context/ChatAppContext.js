@@ -17,6 +17,7 @@ export const ChatAppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
   // Current User Info
   const [currentUserName, setCurrentUserName] = useState("");
@@ -128,6 +129,8 @@ export const ChatAppProvider = ({ children }) => {
         error,
         currentUserName,
         currentUserAddress,
+        search,
+        setSearch,
       }}
     >
       {children}
