@@ -7,8 +7,8 @@ const AllUser = () => {
 
   return (
     <div className="sm:relative sm:w-4/5 text-white w-11/12 m-8 mx-auto">
-      <div className="text-3xl m-4 sm:m-8 sm:text-5xl text-white font-bold">
-        <h1>Find Your Friends</h1>
+      <div className="text-4xl text-center m-8 sm:m-12 sm:text-5xl text-white font-bold">
+        <p>Find Your Friends</p>
       </div>
 
       <div className="grid-cols-1 sm:m-8 sm:grid sm:gap-12 sm:grid-cols-3">

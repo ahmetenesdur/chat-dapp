@@ -1,13 +1,14 @@
 import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import { toast } from "react-toastify";
 
 import getContract from "../utils/getContract";
 
 export const ChatAppContext = createContext();
 
 export const ChatAppProvider = ({ children }) => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
   // UseStates
   const [account, setAccount] = useState("");
@@ -16,7 +17,6 @@ export const ChatAppProvider = ({ children }) => {
   const [friendMsg, setFriendMsg] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userLists, setUserLists] = useState([]);
-  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
 
   // Current User Info
@@ -31,7 +31,7 @@ export const ChatAppProvider = ({ children }) => {
       // Get Contract Instance from utils/getContract.js
       const contract = getContract();
       // Set Current User Address
-      setAccount(address);
+      if (!isConnected) return setAccount(address);
       // Get User Name if exist
       const userName = await contract.getUsername(address);
       setUserName(userName);
@@ -42,7 +42,7 @@ export const ChatAppProvider = ({ children }) => {
       const userList = await contract.getAllAppUser();
       setUserLists(userList);
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -57,7 +57,7 @@ export const ChatAppProvider = ({ children }) => {
       const read = await contract.readMessage(friendAddress);
       setFriendMsg(read);
     } catch (error) {
-      console.log("Currently You Have no Message");
+      toast.error(error.message);
     }
   };
 
@@ -70,14 +70,24 @@ export const ChatAppProvider = ({ children }) => {
       await getCreatedUser.wait();
       setLoading(false);
       window.location.reload();
+      toast.success("Account Created Successfully");
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message);
     }
   };
 
   // Add Friends
   const addFriends = async ({ name, accountAddress }) => {
     try {
+      if (accountAddress === address) {
+        toast.error("You can't add yourself as a friend");
+        return;
+      }
+      if (friendLists.includes(accountAddress)) {
+        toast.error("You already added this person as a friend");
+        return;
+      }
+
       const contract = getContract();
       const addMyFriend = await contract.addFriend(accountAddress, name);
       setLoading(true);
@@ -85,8 +95,9 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(false);
       router.push("/");
       window.location.reload();
+      toast.success("Friend Added Successfully");
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -99,8 +110,9 @@ export const ChatAppProvider = ({ children }) => {
       await addMessage.wait();
       setLoading(false);
       window.location.reload();
+      toast.success("Message Sent Successfully");
     } catch (error) {
-      setError("Please reload and try again");
+      toast.error(error.message);
     }
   };
 
@@ -111,6 +123,7 @@ export const ChatAppProvider = ({ children }) => {
     setCurrentUserName(userName);
     setCurrentUserAddress(userAddress);
   };
+
   return (
     // Provider for all children
     <ChatAppContext.Provider
@@ -126,7 +139,6 @@ export const ChatAppProvider = ({ children }) => {
         friendMsg,
         userLists,
         loading,
-        error,
         currentUserName,
         currentUserAddress,
         search,

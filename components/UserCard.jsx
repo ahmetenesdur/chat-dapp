@@ -3,10 +3,8 @@ import Image from "next/image";
 import images from "../public/assets";
 
 const UserCard = ({ users, i, addFriends }) => {
-
   return (
     <div className="bg-black/25 rounded-lg text-center p-4 mb-8 relative">
-      {/* center image and the space between div*/}
       <div className="items-center flex flex-col">
         <Image
           className="rounded-[50%] mb-4"

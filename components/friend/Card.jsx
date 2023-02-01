@@ -15,7 +15,7 @@ const Card = ({ readMessage, friends, i, readUser }) => {
       <div
         onClick={() => (readMessage(friends.pubkey), readUser(friends.pubkey))}
       >
-        <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#66b3e8] hover:bg-[#66b3e8]/50 hover:text-white overflow-auto">
+        <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#66b3e8] hover:bg-[#66b3e8]/50 hover:text-white overflow-auto scrollbar-hide">
           <div className="rounded-lg">
             <Image
               src={images.accountName}

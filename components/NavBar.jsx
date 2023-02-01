@@ -6,7 +6,6 @@ import { useAccount, useDisconnect } from "wagmi";
 
 import { ChatAppContext } from "../context/ChatAppContext";
 import Model from "./Model";
-import Error from "./Error";
 import images from "../public/assets";
 
 const NavBar = () => {
@@ -26,7 +25,7 @@ const NavBar = () => {
   const [openModel, setOpenModel] = useState(false);
 
   const { isConnected } = useAccount();
-  const { account, userName, createAccount, error } =
+  const { account, userName, createAccount } =
     useContext(ChatAppContext);
   const { disconnect } = useDisconnect();
 
@@ -163,7 +162,6 @@ const NavBar = () => {
           }
         </div>
       )}
-      {error == "" ? "" : <Error error={error} />}
     </div>
   );
 };

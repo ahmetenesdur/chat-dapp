@@ -10,6 +10,9 @@ import { mainnet, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { ChatAppProvider } from "../context/ChatAppContext";
 import NavBar from "@/components/NavBar";
 
@@ -37,6 +40,14 @@ export default function App({ Component, pageProps }) {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={darkTheme()}>
         <ChatAppProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            theme="dark"
+          />
           <NavBar />
           <Component {...pageProps} />
         </ChatAppProvider>

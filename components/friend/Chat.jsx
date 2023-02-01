@@ -21,13 +21,16 @@ const Chat = ({
     name: "",
     address: "",
   });
+  console.log("chatData", chatData);
+  console.log("message", message);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!router.isReady) return;
-    setChatData(router.query);
-  }, [router.isReady]);
+    if (router.query) {
+      setChatData(router.query);
+    }
+  }, [router.query]);
 
   useEffect(() => {
     if (chatData.address) {
@@ -47,7 +50,7 @@ const Chat = ({
         <div className="flex items-center gap-8 leading-none">
           <Image src={images.accountName} alt="image" width={70} height={70} />
           <div>
-            <h1>{currentUserName}</h1>
+            <p className="text-2xl">{currentUserName}</p>
             <p className="text-xs hidden">{currentUserAddress}</p>
           </div>
         </div>
@@ -55,8 +58,8 @@ const Chat = ({
         ""
       )}
 
-      <div className="mt-8">
-        <div className="grid grid-cols-1 m-0 overflow-auto h-[50vh]">
+      <div className="mt-8 px-8">
+        <div className="grid grid-cols-1 m-0 overflow-auto scrollbar-hide h-[50vh]">
           <div>
             {friendMsg.map((message, i) => (
               <div key={i + 1}>
