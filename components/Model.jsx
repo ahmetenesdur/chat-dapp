@@ -22,7 +22,7 @@ const Model = ({
   console.log(accountAddress);
 
   return (
-    <div className="w-[%90] sm:w-[%80] m-4">
+    <div className="w-[%90] m-4 sm:w-[%80] sm:m-16">
       <div className="grid grid-cols-1 sm:grid-cols-2 sm:items-center">
         <div>
           <Image src={image} alt="buddy" width={700} height={700} />

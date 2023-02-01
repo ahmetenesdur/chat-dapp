@@ -45,12 +45,12 @@ const Chat = ({
   };
 
   return (
-    <div className="p-4 sm:p-8 bg-black/25 rounded-lg overflow-auto">
+    <div className="p-4 sm:p-8 bg-black/25 rounded-lg ">
       {currentUserName && currentUserAddress ? (
         <div className="flex items-center gap-8 leading-none">
           <Image src={images.accountName} alt="image" width={70} height={70} />
           <div>
-            <h4>{currentUserName}</h4>
+            <h1>{currentUserName}</h1>
             <p className="text-xs hidden">{currentUserAddress}</p>
           </div>
         </div>
@@ -58,8 +58,8 @@ const Chat = ({
         ""
       )}
 
-      <div>
-        <div className="grid grid-cols-1 w-4/5 m-0 overflow-auto h-[50vh]">
+      <div className="mt-8">
+        <div className="grid grid-cols-1 m-0 overflow-auto h-[50vh]">
           <div>
             {friendMsg.map((message, i) => (
               <div key={i + 1}>
@@ -74,7 +74,7 @@ const Chat = ({
                     <span>
                       {chatData.name} {""}
                       <small className="text-xs">
-                        Time: {formatDate(message.timestamp)}
+                        {formatDate(message.timestamp)}
                       </small>
                     </span>
                   </div>
@@ -88,7 +88,7 @@ const Chat = ({
                     />
                     <span className="relative">
                       {userName} {""}
-                      <small>Time: {formatDate(message.timestamp)}</small>
+                      <small>{formatDate(message.timestamp)}</small>
                     </span>
                   </div>
                 )}
@@ -107,7 +107,7 @@ const Chat = ({
 
         {currentUserName && currentUserAddress ? (
           <div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mt-4">
               <Image src={images.smile} alt="smile" width={50} height={50} />
               <input
                 className="w-full p-4 text-white rounded-lg bg-[#f182035b] outline-0 border-0"

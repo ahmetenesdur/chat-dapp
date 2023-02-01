@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 
 import { ChatAppContext } from "../context/ChatAppContext";
 import Model from "./Model";
@@ -19,34 +19,19 @@ const NavBar = () => {
       menu: "Chat",
       link: "/",
     },
-    {
-      menu: "Contact",
-      link: "/",
-    },
-    {
-      menu: "Settings",
-      link: "/",
-    },
-    {
-      menu: "FAQ",
-      link: "/",
-    },
-    {
-      menu: "Terms of Use",
-      link: "/",
-    },
   ];
 
   const [active, setActive] = useState(2);
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { account, userName, createAccount, error } =
     useContext(ChatAppContext);
+  const { disconnect } = useDisconnect();
 
   return (
-    <div className="sm:relative sm:w-4/5 text-white w-11/12 m-4 mx-auto">
+    <div className="sm:relative sm:w-4/5 sm:mx-auto text-white w-11/12 m-4 mx-auto">
       <div className="flex justify-between sm:items-center sm:gap-8 sm:px-4  sm:py-4 gap-4 py-2 px-2">
         <div className="flex">
           <div className="sm:block">
@@ -75,12 +60,13 @@ const NavBar = () => {
 
           {/* Mobile */}
           {open && (
-            <div className="sm:hidden block fixed z-50 bg-[#292F3F] inset-0 text-center pt-16 ">
+            <div className="sm:hidden block fixed z-50 bg-[#292F3F] inset-0 text-center pt-16">
               {menuItems.map((items, i) => (
                 <div
                   onClick={() => setActive(i + 1)}
                   key={i + 1}
-                  className={`${"mt-4"} ${
+                  // click all div
+                  className={`${"mt-8 cursor-pointer font-bold text-3xl"} ${
                     active == i + 1
                       ? "color-[#F18303] border-b-2 border-solid border-[#F18303] pb-2 "
                       : ""
@@ -106,6 +92,23 @@ const NavBar = () => {
           <div className="flex justify-self-end">
             {!isConnected ? (
               <ConnectButton />
+            ) : userName ? (
+              <button
+                className="bg-[#000000]/25 p-4 border-none rounded-lg font-bold text-[#F18303] cursor-pointer flex text-center gap-2 hover:bg-[#c2410c] hover:text-white"
+                onClick={() => {
+                  disconnect();
+                }}
+              >
+                {""}
+                <Image
+                  src={userName ? images.accountName : images.create2}
+                  alt="Account image"
+                  width={20}
+                  height={20}
+                />
+                {""}
+                <small>{userName || "Create Account"}</small>
+              </button>
             ) : (
               <button
                 className="bg-[#000000]/25 p-4 border-none rounded-lg font-bold text-[#F18303] cursor-pointer flex text-center gap-2"
