@@ -7,9 +7,9 @@ import getContract from "../utils/getContract";
 export const ChatAppContext = createContext();
 
 export const ChatAppProvider = ({ children }) => {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
 
-  //USESTATE
+  // UseStates
   const [account, setAccount] = useState("");
   const [userName, setUserName] = useState("");
   const [friendLists, setFriendLists] = useState([]);
@@ -18,38 +18,38 @@ export const ChatAppProvider = ({ children }) => {
   const [userLists, setUserLists] = useState([]);
   const [error, setError] = useState("");
 
-  //CHAT USER DATA
+  // Current User Info
   const [currentUserName, setCurrentUserName] = useState("");
   const [currentUserAddress, setCurrentUserAddress] = useState("");
 
   const router = useRouter();
 
-  //FETCH DATA TIME OF PAGE LOAD
+  // Fetch Data from Blockchain
   const fetchData = async () => {
     try {
-      //GET CONTRACT
+      // Get Contract Instance from utils/getContract.js
       const contract = getContract();
-      //GET ACCOUNT
+      // Set Current User Address
       setAccount(address);
-      //GET USER NAME
+      // Get User Name if exist
       const userName = await contract.getUsername(address);
       setUserName(userName);
-      //GET MY FRIEND LIST
+      // Get All Friends List
       const friendLists = await contract.getMyFriendList();
       setFriendLists(friendLists);
-      //GET ALL APP USER LIST
+      // Get All User List
       const userList = await contract.getAllAppUser();
       setUserLists(userList);
     } catch (error) {
-      // setError("Please Install And Connect Your Wallet");
-      console.log(error);
+      console.log(error.message);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  //READ MESSAGE
+  // Read Message
   const readMessage = async (friendAddress) => {
     try {
       const contract = getContract();
@@ -60,12 +60,9 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  //CREATE ACCOUNT
+  // Create Account
   const createAccount = async ({ name, accountAddress }) => {
     try {
-      // if (name || accountAddress)
-      //   return setError("Name And AccountAddress, cannot be empty");
-
       const contract = getContract();
       const getCreatedUser = await contract.createAccount(name);
       setLoading(true);
@@ -77,11 +74,9 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  //ADD YOUR FRIENDS
+  // Add Friends
   const addFriends = async ({ name, accountAddress }) => {
     try {
-      // if (name || accountAddress) return setError("Please provide data");
-
       const contract = getContract();
       const addMyFriend = await contract.addFriend(accountAddress, name);
       setLoading(true);
@@ -94,11 +89,9 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  //SEND MESSAGE TO YOUR FRIEND
+  // Send Message to Friends
   const sendMessage = async ({ msg, address }) => {
     try {
-      // if (msg || address) return setError("Please Type your Message");
-
       const contract = getContract();
       const addMessage = await contract.sendMessage(address, msg);
       setLoading(true);
@@ -110,7 +103,7 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  //READ INFO
+  // Read User Info
   const readUser = async (userAddress) => {
     const contract = getContract();
     const userName = await contract.getUsername(userAddress);
@@ -118,6 +111,7 @@ export const ChatAppProvider = ({ children }) => {
     setCurrentUserAddress(userAddress);
   };
   return (
+    // Provider for all children
     <ChatAppContext.Provider
       value={{
         readMessage,
