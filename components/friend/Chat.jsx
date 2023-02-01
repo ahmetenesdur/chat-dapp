@@ -22,9 +22,6 @@ const Chat = ({
     address: "",
   });
 
-  console.log("chatData => ", chatData);
-  console.log("message => ", message);
-
   const router = useRouter();
 
   useEffect(() => {
@@ -93,7 +90,7 @@ const Chat = ({
                   </div>
                 )}
                 <p
-                  className="text-xs p-4 relative bg-[#f182035b] rounded-t-lg rounded-bl-lg"
+                  className="text-xs p-4 relative bg-[#66b3e8]/40 rounded-t-lg rounded-bl-lg"
                   key={i + 1}
                 >
                   {message.msg}
@@ -110,7 +107,7 @@ const Chat = ({
             <div className="flex items-center gap-4 mt-4">
               <Image src={images.smile} alt="smile" width={50} height={50} />
               <input
-                className="w-full p-4 text-white rounded-lg bg-[#f182035b] outline-0 border-0"
+                className="w-full p-4 text-white rounded-lg bg-[#66b3e8]/25 outline-0 border-0"
                 type="text"
                 placeholder="Type a message"
                 onChange={(e) => setMessage(e.target.value)}

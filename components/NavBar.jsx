@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +21,7 @@ const NavBar = () => {
     },
   ];
 
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState();
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
@@ -30,13 +30,23 @@ const NavBar = () => {
     useContext(ChatAppContext);
   const { disconnect } = useDisconnect();
 
+  //currentPage
+  useEffect(() => {
+    const currentPage = window.location.pathname;
+    if (currentPage == "/") {
+      setActive(2);
+    } else if (currentPage == "/alluser") {
+      setActive(1);
+    }
+  }, []);
+
   return (
     <div className="sm:relative sm:w-4/5 sm:mx-auto text-white w-11/12 m-4 mx-auto">
       <div className="flex justify-between sm:items-center sm:gap-8 sm:px-4  sm:py-4 gap-4 py-2 px-2">
         <div className="flex">
-          <div className="sm:block">
+          <div className="sm:block" onClick={() => setActive(2)}>
             <Link href="/">
-              <Image src={images.logo} alt="logo" width={50} height={50} />
+              <Image src={images.logo} alt="logo" width={100} height={100} />
             </Link>
           </div>
         </div>
@@ -49,7 +59,7 @@ const NavBar = () => {
                 key={i + 1}
                 className={`${
                   active == i + 1
-                    ? "color-[#F18303] border-b-2 border-solid border-[#F18303] pb-2"
+                    ? "color-[#66b3e8] border-b-2 border-solid border-[#66b3e8] pb-2"
                     : ""
                 }`}
               >
@@ -68,7 +78,7 @@ const NavBar = () => {
                   // click all div
                   className={`${"mt-8 cursor-pointer font-bold text-3xl"} ${
                     active == i + 1
-                      ? "color-[#F18303] border-b-2 border-solid border-[#F18303] pb-2 "
+                      ? "color-[#66b3e8] border-b-2 border-solid border-[#66b3e8] pb-2 "
                       : ""
                   }`}
                 >
@@ -89,12 +99,12 @@ const NavBar = () => {
           )}
 
           {/* Connect Wallet */}
-          <div className="flex justify-self-end">
+          <div className="flex justify-self-end pl-2">
             {!isConnected ? (
               <ConnectButton />
             ) : userName ? (
               <button
-                className="bg-[#000000]/25 p-4 border-none rounded-lg font-bold text-[#F18303] cursor-pointer flex text-center gap-2 hover:bg-[#c2410c] hover:text-white"
+                className="bg-black/25 p-4 border-none rounded-lg font-bold text-[#66b3e8] cursor-pointer flex text-center gap-2 hover:bg-[#30556e] hover:text-white"
                 onClick={() => {
                   disconnect();
                 }}
@@ -111,7 +121,7 @@ const NavBar = () => {
               </button>
             ) : (
               <button
-                className="bg-[#000000]/25 p-4 border-none rounded-lg font-bold text-[#F18303] cursor-pointer flex text-center gap-2"
+                className="bg-black/25 p-4 border-none rounded-lg font-bold text-[#66b3e8] cursor-pointer flex text-center gap-2 hover:bg-[#30556e] hover:text-white"
                 onClick={() => setOpenModel(true)}
               >
                 {""}

@@ -16,7 +16,7 @@ import account from "./account.png";
 import username from "./username.png";
 import friends from "./friends.png";
 import friends2 from "./friends2.png";
-import accountName from "./acountName.png";
+import accountName from "./accountName.png";
 import dot from "./dot.png";
 import loader from "./loader.gif";
 import image1 from "./img1.gif";

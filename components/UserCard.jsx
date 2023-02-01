@@ -20,7 +20,7 @@ const UserCard = ({ users, i, addFriends }) => {
           <h3 className="mb-2">{users.name}</h3>
           <p className="mb-2">{users.accountAddress.slice(0, 25)}..</p>
           <button
-            className="bg-black/25 text-[#F18303] w-6/12 p-4 border-0 rounded-lg text-base cursor-pointer"
+            className="bg-black/25 text-[#66b3e8] w-6/12 p-4 border-0 rounded-lg text-base cursor-pointer hover:bg-[#30556e] hover:text-white"
             onClick={() =>
               addFriends({
                 name: users.name,
@@ -33,7 +33,7 @@ const UserCard = ({ users, i, addFriends }) => {
         </div>
       </div>
 
-      <small className="absolute w-8 h-8 rounded-[50%] bg-[#F18303] text-white font-bold text-base top-4 right-4 align-middle flex items-center justify-center">
+      <small className="absolute w-8 h-8 rounded-[50%] bg-[#66b3e8] text-white font-bold text-base top-4 right-4 align-middle flex items-center justify-center">
         {i + 1}
       </small>
     </div>

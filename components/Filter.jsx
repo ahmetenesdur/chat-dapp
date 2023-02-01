@@ -16,7 +16,7 @@ const Filter = () => {
           <div className="w-full flex items-center gap-4 rounded-xl bg-black/25 text-orange-600 px-4">
             <Image src={images.search} alt="image" width={20} height={20} />
             <input
-              className="bg-transparent p-4 text-orange-600 w-scren sm:w-80 outline-0 border-0"
+              className="bg-transparent p-4 text-white sm:w-80 outline-0 border-0"
               type="text"
               placeholder="Search.."
             />
@@ -24,12 +24,12 @@ const Filter = () => {
         </div>
         <div className="flex gap-4">
           <button
-            className="text-xs bg-black/25 text-orange-600 rounded-xl font-bold flex items-center gap-2 py-4 px-4 outline-0 border-0 hover:bg-orange-700 hover:text-white"
+            className="text-sm bg-black/25 text-[#66b3e8] rounded-xl font-bold flex items-center gap-2 py-4 px-4 outline-0 border-0 hover:bg-[#30556e] hover:text-white"
             onClick={() => setAddFriend(true)}
             disabled={ userName ? false : true }
           >
-            <Image src={images.user} alt="clear" width={20} height={20} />
-            ADD FRIEND
+            <Image src={images.user} alt="users" width={20} height={20} />
+            Add Friends
           </button>
         </div>
       </div>

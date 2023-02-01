@@ -5,8 +5,6 @@ import Link from "next/link";
 import images from "../../public/assets";
 
 const Card = ({ readMessage, friends, i, readUser }) => {
-  console.log(friends);
-
   return (
     <Link
       href={{
@@ -17,7 +15,7 @@ const Card = ({ readMessage, friends, i, readUser }) => {
       <div
         onClick={() => (readMessage(friends.pubkey), readUser(friends.pubkey))}
       >
-        <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#f1820342] hover:bg-[#f1820342] rounded-lg overflow-auto">
+        <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#66b3e8] hover:bg-[#66b3e8]/50 hover:text-white overflow-auto">
           <div className="rounded-lg">
             <Image
               src={images.accountName}
