@@ -59,7 +59,7 @@ const Model = ({
                   className="w-[100%] bg-transparent text-white outline-none border-none"
                   type="text"
                   placeholder={address || "Enter address here.."}
-                  value={address}
+                  value={address || accountAddress}
                   onChange={(e) => setAccountAddress(e.target.value)}
                 />
               </div>
