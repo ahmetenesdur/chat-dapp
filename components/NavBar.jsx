@@ -104,7 +104,7 @@ const NavBar = () => {
               <ConnectButton />
             ) : userName ? (
               <button
-                className="bg-black/25 p-4 border-none rounded-lg font-bold text-[#66b3e8] cursor-pointer flex text-center gap-2 hover:bg-[#30556e] hover:text-white"
+                className="bg-black/25 p-4 border-none rounded-lg font-bold text-[#66b3e8] cursor-pointer flex text-center gap-2 hover:bg-[#30556e] hover:text-white items-center"
                 onClick={() => {
                   disconnect();
                 }}
@@ -121,7 +121,7 @@ const NavBar = () => {
               </button>
             ) : (
               <button
-                className="bg-black/25 p-4 border-none rounded-lg font-bold text-[#66b3e8] cursor-pointer flex text-center gap-2 hover:bg-[#30556e] hover:text-white"
+                className="bg-black/25 p-4 border-none rounded-lg font-bold text-[#66b3e8] cursor-pointer flex text-center gap-2 hover:bg-[#30556e] hover:text-white text-xs sm:text-sm items-center"
                 onClick={() => setOpenModel(true)}
               >
                 {""}
@@ -148,7 +148,7 @@ const NavBar = () => {
 
       {/* Model Component */}
       {openModel && (
-        <div className="sm:fixed inset-0 bg-[#292F3F] z-50 absolute">
+        <div className="block fixed z-50 bg-[#292F3F] inset-0 overflow-auto">
           {
             <Model
               openBox={setOpenModel}

@@ -49,7 +49,7 @@ const Model = ({
                 <input
                   className="w-[100%] bg-transparent text-white outline-none border-none"
                   type="text"
-                  placeholder="Enter Name.."
+                  placeholder="Enter Name here.."
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
@@ -58,7 +58,7 @@ const Model = ({
                 <input
                   className="w-[100%] bg-transparent text-white outline-none border-none"
                   type="text"
-                  placeholder={address || "Enter address.."}
+                  placeholder={address || "Enter address here.."}
                   value={address}
                   onChange={(e) => setAccountAddress(e.target.value)}
                 />
