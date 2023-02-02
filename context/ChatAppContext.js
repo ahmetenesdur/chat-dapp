@@ -28,10 +28,11 @@ export const ChatAppProvider = ({ children }) => {
   // Fetch Data from Blockchain
   const fetchData = async () => {
     try {
+      if (!isConnected) return;
       // Get Contract Instance from utils/getContract.js
       const contract = getContract();
       // Set Current User Address
-      if (!isConnected) return setAccount(address);
+      setAccount(address);
       // Get User Name if exist
       const userName = await contract.getUsername(address);
       setUserName(userName);
