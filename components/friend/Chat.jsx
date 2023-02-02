@@ -21,8 +21,6 @@ const Chat = ({
     name: "",
     address: "",
   });
-  console.log("chatData", chatData);
-  console.log("message", message);
 
   const router = useRouter();
 
@@ -64,7 +62,7 @@ const Chat = ({
             {friendMsg.map((message, i) => (
               <div key={i + 1}>
                 {message.sender == chatData.address ? (
-                  <div className="flex items-center gap-4 text-base">
+                  <div className="flex items-center gap-4 text-base mt-1">
                     <Image
                       src={images.accountName}
                       alt="image"
@@ -79,7 +77,7 @@ const Chat = ({
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-4 text-base">
+                  <div className="flex items-center gap-4 text-base mt-1">
                     <Image
                       src={images.accountName}
                       alt="image"
@@ -93,7 +91,7 @@ const Chat = ({
                   </div>
                 )}
                 <p
-                  className="text-xs p-4 relative bg-[#66b3e8]/40 rounded-t-lg rounded-bl-lg"
+                  className="text-xs p-4 relative bg-[#66b3e8]/40 rounded-t-lg rounded-bl-lg mt-1"
                   key={i + 1}
                 >
                   {message.msg}

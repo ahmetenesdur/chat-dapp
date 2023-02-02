@@ -16,7 +16,10 @@ const UserCard = ({ users, i, addFriends }) => {
 
         <div className="text-white">
           <h3 className="mb-2">{users.name}</h3>
-          <p className="mb-2">{users.accountAddress.slice(0, 25)}..</p>
+          <p className="mb-2">
+            {users.accountAddress.slice(0, 12)}...
+            {users.accountAddress.slice(-12)}
+          </p>
           <button
             className="bg-black/25 text-[#66b3e8] w-6/12 p-4 border-0 rounded-lg text-base cursor-pointer hover:bg-[#30556e] hover:text-white"
             onClick={() =>

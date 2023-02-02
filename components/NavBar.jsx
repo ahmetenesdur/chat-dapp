@@ -73,7 +73,6 @@ const NavBar = () => {
                 <div
                   onClick={() => setActive(i + 1)}
                   key={i + 1}
-                  // click all div
                   className={`${"mt-8 cursor-pointer font-bold text-3xl"} ${
                     active == i + 1
                       ? "color-[#66b3e8] border-b-2 border-solid border-[#66b3e8] pb-2 "

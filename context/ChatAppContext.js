@@ -11,7 +11,6 @@ export const ChatAppProvider = ({ children }) => {
   const { address, isConnected } = useAccount();
 
   // UseStates
-  const [account, setAccount] = useState("");
   const [userName, setUserName] = useState("");
   const [friendLists, setFriendLists] = useState([]);
   const [friendMsg, setFriendMsg] = useState([]);
@@ -28,11 +27,10 @@ export const ChatAppProvider = ({ children }) => {
   // Fetch Data from Blockchain
   const fetchData = async () => {
     try {
+      // Check if user is connected to wallet
       if (!isConnected) return;
       // Get Contract Instance from utils/getContract.js
       const contract = getContract();
-      // Set Current User Address
-      setAccount(address);
       // Get User Name if exist
       const userName = await contract.getUsername(address);
       setUserName(userName);
@@ -63,7 +61,7 @@ export const ChatAppProvider = ({ children }) => {
   };
 
   // Create Account
-  const createAccount = async ({ name, accountAddress }) => {
+  const createAccount = async ({ name }) => {
     try {
       const contract = getContract();
       const getCreatedUser = await contract.createAccount(name);
@@ -80,12 +78,12 @@ export const ChatAppProvider = ({ children }) => {
   // Add Friends
   const addFriends = async ({ name, accountAddress }) => {
     try {
-      if (accountAddress === address) {
-        toast.error("You can't add yourself as a friend");
+      if (friendLists.includes(accountAddress)) {
+        toast.error("You are already friends with this user");
         return;
       }
-      if (friendLists.includes(accountAddress)) {
-        toast.error("You already added this person as a friend");
+      if (accountAddress === address) {
+        toast.error("You can't add yourself as a friend");
         return;
       }
 
@@ -134,7 +132,6 @@ export const ChatAppProvider = ({ children }) => {
         addFriends,
         sendMessage,
         readUser,
-        account,
         userName,
         friendLists,
         friendMsg,
