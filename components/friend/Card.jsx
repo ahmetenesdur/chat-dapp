@@ -27,7 +27,9 @@ const Card = ({ readMessage, friends, i, readUser }) => {
           <div className="flex gap-12">
             <div className="-mt-0">
               <h4>{friends.name}</h4>
-              <small>{friends.pubkey.slice(0, 8)}...{friends.pubkey.slice(-8)}</small>
+              <small>
+                {friends.pubkey.slice(0, 8)}...{friends.pubkey.slice(-8)}
+              </small>
             </div>
             {/* be in line */}
             <div className="flex items-center gap-2 ml-auto">
