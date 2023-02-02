@@ -1,13 +1,15 @@
 import { useContext } from "react";
+import { useAccount } from "wagmi";
 
 import Card from "./Card";
 import Chat from "./Chat";
 import { ChatAppContext } from "../../context/ChatAppContext";
 
 const Friend = () => {
+  const { address } = useAccount();
+
   const {
     sendMessage,
-    account,
     friendLists,
     readMessage,
     userName,
@@ -53,7 +55,7 @@ const Friend = () => {
             sendMessage={sendMessage}
             readMessage={readMessage}
             friendMsg={friendMsg}
-            account={account}
+            account={address}
             userName={userName}
             loading={loading}
             currentUserName={currentUserName}

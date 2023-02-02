@@ -24,9 +24,8 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
-  const { isConnected } = useAccount();
-  const { account, userName, createAccount } =
-    useContext(ChatAppContext);
+  const { address, isConnected } = useAccount();
+  const { userName, createAccount } = useContext(ChatAppContext);
   const { disconnect } = useDisconnect();
 
   //currentPage
@@ -157,7 +156,7 @@ const NavBar = () => {
               smallInfo="Secret Key is used to encrypt your messages. Please keep it safe."
               image={images.hero}
               functionName={createAccount}
-              address={account}
+              address={address}
             />
           }
         </div>
