@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { formatRelative } from "date-fns";
@@ -16,6 +16,8 @@ const Chat = ({
   currentUserAddress,
   readUser,
 }) => {
+  const bottomRef = useRef(null);
+
   const [message, setMessage] = useState("");
   const [chatData, setChatData] = useState({
     name: "",
@@ -23,6 +25,10 @@ const Chat = ({
   });
 
   const router = useRouter();
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [friendMsg]);
 
   useEffect(() => {
     if (router.query) {
@@ -35,7 +41,7 @@ const Chat = ({
       readMessage(chatData.address);
       readUser(chatData.address);
     }
-  }, []);
+  }, [chatData.address]);
 
   const formatDate = (blockTimestamp) => {
     const date = new Date(blockTimestamp * 1000);
@@ -60,7 +66,7 @@ const Chat = ({
         <div className="grid grid-cols-1 m-0 overflow-auto scrollbar-hide h-[50vh]">
           <div>
             {friendMsg.map((message, i) => (
-              <div key={i + 1}>
+              <div ref={bottomRef} key={i + 1}>
                 {message.sender == chatData.address ? (
                   <div className="flex items-center gap-4 text-base mt-1">
                     <Image
@@ -106,18 +112,31 @@ const Chat = ({
         {currentUserName && currentUserAddress ? (
           <div>
             <div className="flex items-center gap-4 mt-4">
-              <Image src={images.smile} alt="smile" width={50} height={50} />
+              <Image
+                className="cursor-pointer hover:opacity-50 transition duration-300"
+                src={images.smile}
+                alt="smile"
+                width={50}
+                height={50}
+              />
               <input
-                className="w-full p-4 text-white rounded-lg bg-[#66b3e8]/25 outline-0 border-0"
+                className="w-full p-4 text-white rounded-lg bg-[#66b3e8]/25 outline-0 border-0 focus:ring-0"
                 type="text"
                 placeholder="Type a message"
                 onChange={(e) => setMessage(e.target.value)}
               />
-              <Image src={images.file} alt="file" width={50} height={50} />
+              <Image
+                className="cursor-pointer hover:opacity-50 transition duration-300"
+                src={images.file}
+                alt="file"
+                width={50}
+                height={50}
+              />
               {loading == true ? (
                 <Loader />
               ) : (
                 <Image
+                  className="cursor-pointer hover:opacity-50 transition duration-300"
                   src={images.send}
                   alt="file"
                   width={50}
