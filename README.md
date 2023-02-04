@@ -92,7 +92,21 @@ https://wagmi.sh/react/getting-started
 
 ## Screenshots
 
-![dApp Screenshot1]()
-![dApp Screenshot2]()
-![dApp Screenshot3]()
-![dApp Screenshot4]()
+![dApp Screenshot1](https://i.imgur.com/qNlEv39.png)
+![dApp Screenshot2](https://i.imgur.com/SewtyDc.png)
+![dApp Screenshot3](https://i.imgur.com/UIcyvGp.png)
+![dApp Screenshot4](https://i.imgur.com/bVkzcTO.png)
+![dApp Screenshot5](https://i.imgur.com/zwz2kGB.png)
+![dApp Screenshot6](https://i.imgur.com/WHMR9X8.png)
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+<!-- CONTACT -->
+
+## Contact
+
+[![linkedin](https://img.shields.io/badge/linkedin-230?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmetenesdur/) [![github](https://img.shields.io/badge/github-230?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ahmetenesdur)
