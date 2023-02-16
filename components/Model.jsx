@@ -16,7 +16,7 @@ const Model = ({
   functionName,
 }) => {
   const [name, setName] = useState("");
-  const [accountAddress, setAccountAddress] = useState("");
+  const [userAddress, setUserAddress] = useState(address);
 
   const { loading } = useContext(ChatAppContext);
 
@@ -59,15 +59,15 @@ const Model = ({
                   className="w-[100%] bg-transparent text-white outline-none border-none"
                   type="text"
                   placeholder={address || "Enter address here.."}
-                  value={address || accountAddress}
-                  onChange={(e) => setAccountAddress(e.target.value)}
+                  value={address || userAddress}
+                  onChange={(e) => setUserAddress(e.target.value)}
                 />
               </div>
 
               <div className="grid grid-cols-1 z-50 sm:grid-cols-2 gap-4 sm:mx-4">
                 <button
                   className="outline-none border-none text-xl font-bold text-[#66b3e8] bg-black/25 p-4 border-2 rounded-lg flex items-center justify-center gap-4 cursor-pointer hover:bg-[#30556e] hover:text-white"
-                  onClick={() => functionName({ name, accountAddress })}
+                  onClick={() => functionName({ name, userAddress })}
                 >
                   {""}
                   <Image src={images.send} alt="send" width={30} height={30} />

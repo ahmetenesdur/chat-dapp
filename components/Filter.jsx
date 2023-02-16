@@ -4,7 +4,6 @@ import Image from "next/image";
 import images from "../public/assets";
 import { ChatAppContext } from "../context/ChatAppContext";
 import Model from "./Model";
-import Friend from "./friend/Friend";
 
 const Filter = () => {
   const { addFriends, userName, setSearch } = useContext(ChatAppContext);

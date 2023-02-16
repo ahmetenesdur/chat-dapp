@@ -25,7 +25,7 @@ const UserCard = ({ users, i, addFriends }) => {
             onClick={() =>
               addFriends({
                 name: users.name,
-                accountAddress: users.accountAddress,
+                userAddress: users.accountAddress,
               })
             }
           >
