@@ -28,7 +28,7 @@ const { chains, provider, publicClient, webSocketPublicClient } =
     [
       jsonRpcProvider({
         rpc: () => ({
-          http: "https://bsc.getblock.io/2f45bdc2-6f28-4869-be42-f99337844c56/testnet",
+          http: process.env.NEXT_PUBLIC_RPC_URL,
         }),
       }),
       publicProvider(),
