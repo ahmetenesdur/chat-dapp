@@ -87,13 +87,15 @@ https://wagmi.sh/react/getting-started
 
 1.  Create a user account
 2.  Add friends
-3.  Send messages
-4.  Read messages
+3.  View friend lists
+4.  Search friends by username
+5.  Send messages
+6.  Read messages
 
 ## Screenshots
 
 ![dApp Screenshot1](https://i.imgur.com/qNlEv39.png)
-![dApp Screenshot2](https://i.imgur.com/SewtyDc.png)
+![dApp Screenshot2](https://i.imgur.com/uhtYJDq.png)
 ![dApp Screenshot3](https://i.imgur.com/UIcyvGp.png)
 ![dApp Screenshot4](https://i.imgur.com/bVkzcTO.png)
 ![dApp Screenshot5](https://i.imgur.com/zwz2kGB.png)

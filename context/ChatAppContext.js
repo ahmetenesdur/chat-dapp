@@ -41,7 +41,7 @@ export const ChatAppProvider = ({ children }) => {
       const userList = await contract.getAllAppUser();
       setUserLists(userList);
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Please create account first");
     }
   };
 
@@ -104,9 +104,7 @@ export const ChatAppProvider = ({ children }) => {
       window.location.reload();
       toast.success("Friend Added Successfully");
     } catch (error) {
-      toast.error(
-        "Something went wrong, please try again later or connect to wallet"
-      );
+      toast.error("Please sure this address is having an account");
     }
   };
 
