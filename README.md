@@ -1,10 +1,14 @@
-# Chat dApp
+# BNB Chain Development Bootcamp Final Case
 
-This is a Solidity smart contract for a chat application on the Ethereum blockchain. The contract defines structs for users, friends, and messages, as well as mappings to store user and message data. The contract includes functions for creating and checking for user accounts, adding friends, sending and reading messages, and retrieving friend lists. It also includes internal helper functions for adding friends and generating a unique "chat code" for message threads between two users. Overall, this contract allows for secure and decentralized communication between users on the Ethereum blockchain.
+## Chat dApp
+
+This is a Solidity smart contract for a chat application on the Binance Smart Chain. The contract defines structs for users, friends, and messages, as well as mappings to store user and message data. The contract includes functions for creating and checking for user accounts, adding friends, sending and reading messages, and retrieving friend lists. It also includes internal helper functions for adding friends and generating a unique "chat code" for message threads between two users. Overall, this contract allows for secure and decentralized communication between users on the Binance Smart Chain.
+
+This dapp is a front-end application that allows users to interact with the smart contract. It includes a user interface for creating accounts, adding friends, sending and reading messages, and viewing friend lists. It also includes a user interface for viewing the smart contract's state variables, such as the user and message mappings. This dapp is built using Next.js, Tailwind CSS, Solidity, Hardhat, and Ether.js.
 
 ##### The project is built using the following technologies:
 
-NextJS, TailwindCSS, Solidity, Hardhat, Ether.js, Alchemy API, Etherscan and Goerli Testnet.
+NextJS, TailwindCSS, Solidity, Hardhat, Ether.js, RainbowKit, Wagmi, BscScan, BNBChain Testnet, Vercel
 
 To see the project in action, visit the following link:
 
@@ -23,7 +27,7 @@ You need to have Node.js, NPM and hardhat installed on your computer, before run
 Wallet Connect Modals :
 https://www.rainbowkit.com/docs/introduction
 
-Ethereum React Hooks :
+React Hooks :
 https://wagmi.sh/react/getting-started
 
 ### Installation
@@ -47,7 +51,8 @@ https://wagmi.sh/react/getting-started
 3.  Create an `.env.local` file looking like this
     ```sh
     RPC_URL=""
-    NEXT_PUBLIC_ALCHEMY_ID=""
+    NEXT_PUBLIC_RPC_URL=""
+    NEXT_PUBLIC_WALLET_CONNECT_ID=""
     METAMASK_PRIVATE_KEY=""
     ETHERSCAN_API_KEY=""
     ```

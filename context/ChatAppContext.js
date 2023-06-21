@@ -104,7 +104,7 @@ export const ChatAppProvider = ({ children }) => {
       window.location.reload();
       toast.success("Friend Added Successfully");
     } catch (error) {
-      toast.error("Please sure this address is having an account");
+      toast.error("Please sure this address is having an account or you have already added this address as a friend");
     }
   };
 
