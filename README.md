@@ -57,12 +57,12 @@ https://wagmi.sh/react/getting-started
     ```
 5.  Deploy the smart contract (Examine the comment lines in the scripts.)
     ```sh
-    npx hardhat run scripts/deploy.js --network goerli
+    npx hardhat run scripts/deploy.js --network testnet
     ```
 6.  Verify the smart contract (Optional)
 
     ```sh
-    npx hardhat run scripts/verify.js --network goerli
+    npx hardhat run scripts/verify.js --network testnet
     ```
 
 7.  Run the app

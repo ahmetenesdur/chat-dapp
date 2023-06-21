@@ -75,7 +75,7 @@ const Chat = ({
                       width={50}
                       height={50}
                     />
-                    <span>
+                    <span className="text-red-400">
                       {chatData.name} {""}
                       <small className="text-xs">
                         {formatDate(message.timestamp)}

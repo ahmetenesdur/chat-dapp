@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 
@@ -8,7 +8,7 @@ import getContract from "../utils/getContract";
 export const ChatAppContext = createContext();
 
 export const ChatAppProvider = ({ children }) => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, isDisconnected } = useAccount();
 
   // UseStates
   const [userName, setUserName] = useState("");
@@ -47,6 +47,12 @@ export const ChatAppProvider = ({ children }) => {
 
   useEffect(() => {
     fetchData();
+    if (isDisconnected) {
+      window.location.reload();
+    }
+    // if address change setFriendMsg to empty array and currentUserName to empty string
+    setFriendMsg([]);
+    setCurrentUserName("");
   }, [address]);
 
   // Read Message
@@ -56,7 +62,7 @@ export const ChatAppProvider = ({ children }) => {
       const read = await contract.readMessage(friendAddress);
       setFriendMsg(read);
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Please connect to wallet");
     }
   };
 
@@ -73,7 +79,7 @@ export const ChatAppProvider = ({ children }) => {
       window.location.reload();
       toast.success("Account Created Successfully");
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Please try again later or connect to wallet");
     }
   };
 
@@ -98,7 +104,9 @@ export const ChatAppProvider = ({ children }) => {
       window.location.reload();
       toast.success("Friend Added Successfully");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(
+        "Something went wrong, please try again later or connect to wallet"
+      );
     }
   };
 
@@ -111,9 +119,12 @@ export const ChatAppProvider = ({ children }) => {
       await addMessage.wait();
       setLoading(false);
       window.location.reload();
-      toast.success("Message Sent Successfully");
+      // wait 5 seconds and then show success message
+      setTimeout(() => {
+        toast.success("Message Sent Successfully");
+      }, 100);
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Something went wrong, please try again later");
     }
   };
 
