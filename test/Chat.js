@@ -1,9 +1,11 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
+// Test case for the "Chat" contract
 describe("Chat", function () {
   let Chat, chat, owner, user1, user2;
 
+  // Set up the contract and accounts before each test case
   beforeEach(async function () {
     [owner, user1, user2] = await ethers.getSigners();
 
@@ -12,12 +14,14 @@ describe("Chat", function () {
     await chat.deployed();
   });
 
+  // Test case for creating an account
   it("should create an account", async function () {
     await chat.connect(user1).createAccount("User 1");
     const username = await chat.connect(user1).getUsername(user1.address);
     expect(username).to.equal("User 1");
   });
 
+  // Test case for adding a friend
   it("should add a friend", async function () {
     await chat.connect(user1).createAccount("User 1");
     await chat.connect(user2).createAccount("User 2");
@@ -30,12 +34,13 @@ describe("Chat", function () {
     expect(friendList2).to.have.lengthOf(1);
   });
 
+  // Test case for sending and reading messages
   it("should send and read messages", async function () {
     await chat.connect(user1).createAccount("User 1");
     await chat.connect(user2).createAccount("User 2");
 
     await chat.connect(user1).addFriend(user2.address, "User 2");
-    
+
     await chat.connect(user1).sendMessage(user2.address, "Hello");
 
     const messages = await chat.connect(user2).readMessage(user1.address);
@@ -43,6 +48,7 @@ describe("Chat", function () {
     expect(messages[0].msg).to.equal("Hello");
   });
 
+  // Test case for getting all users
   it("should get all users", async function () {
     await chat.connect(user1).createAccount("User 1");
     await chat.connect(user2).createAccount("User 2");

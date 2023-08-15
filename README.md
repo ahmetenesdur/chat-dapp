@@ -1,16 +1,16 @@
-# BNB Chain Development Bootcamp Final Case
+# BNB Chain Development Bootcamp Final Case: Chat dApp
 
-## Chat dApp
+Welcome to the Chat dApp! This Solidity smart contract powers a chat application on the Binance Smart Chain. The contract defines structures for users, friends, and messages, along with mappings to efficiently store user and message data. The contract's functionalities encompass creating and verifying user accounts, adding friends, sending and reading messages, and fetching friend lists. Internal helper functions are in place for friend addition and generating unique "chat codes" for seamless message exchanges between users. The contract stands as a cornerstone for secure and decentralized communication on the Binance Smart Chain.
 
-This is a Solidity smart contract for a chat application on the Binance Smart Chain. The contract defines structs for users, friends, and messages, as well as mappings to store user and message data. The contract includes functions for creating and checking for user accounts, adding friends, sending and reading messages, and retrieving friend lists. It also includes internal helper functions for adding friends and generating a unique "chat code" for message threads between two users. Overall, this contract allows for secure and decentralized communication between users on the Binance Smart Chain.
+Enabling users to interact seamlessly with the smart contract, the dapp features a user-friendly interface. This interface empowers users to create accounts, add friends, exchange messages, review conversation histories, and access the contract's underlying state variables—such as user and message mappings. The dapp is skillfully crafted using a combination of Next.js, Tailwind CSS, Solidity, Hardhat, and Ether.js.
 
-This dapp is a front-end application that allows users to interact with the smart contract. It includes a user interface for creating accounts, adding friends, sending and reading messages, and viewing friend lists. It also includes a user interface for viewing the smart contract's state variables, such as the user and message mappings. This dapp is built using Next.js, Tailwind CSS, Solidity, Hardhat, and Ether.js.
+## Key Technologies
 
-##### The project is built using the following technologies:
+This project leverages the following technologies to deliver a robust experience:
 
 NextJS, TailwindCSS, Solidity, Hardhat, Ether.js, RainbowKit, Wagmi, BscScan, BNBChain Testnet, Vercel
 
-To see the project in action, visit the following link:
+To see this project in action, visit the link below:
 
 [![vercel](https://img.shields.io/badge/vercel-230?style=for-the-badge&logo=vercel&logoColor=white)](https://chat-dapp-hazel.vercel.app/)
 
@@ -18,25 +18,22 @@ To see the project in action, visit the following link:
 
 ## Getting Started
 
-To get this application up and and running on your local machine follow these simple steps.
+To run this application on your local machine, follow these straightforward steps:
 
 ### Prerequisites
 
-You need to have Node.js, NPM and hardhat installed on your computer, before running this project.
+Before getting started, ensure you have Node.js, NPM, and Hardhat installed on your computer. Additionally, familiarity with Wallet Connect Modals and React Hooks will be beneficial:
 
-Wallet Connect Modals :
-https://www.rainbowkit.com/docs/introduction
-
-React Hooks :
-https://wagmi.sh/react/getting-started
+- [Wallet Connect Modals Documentation](https://www.rainbowkit.com/docs/introduction)
+- [React Hooks by Wagmi](https://wagmi.sh/react/getting-started)
 
 ### Installation
 
-1.  Clone the repo
+1.  Clone the repository:
     ```sh
     git clone https://github.com/ahmetenesdur/chat-dapp.git
     ```
-2.  Install NPM packages
+2.  Install NPM packages:
 
     ```sh
     npm install
@@ -48,29 +45,37 @@ https://wagmi.sh/react/getting-started
     yarn install
     ```
 
-3.  Create an `.env.local` file looking like this
+3.  Create an .env.local file with the following content:
     ```sh
     RPC_URL=""
     NEXT_PUBLIC_RPC_URL=""
     NEXT_PUBLIC_WALLET_CONNECT_ID=""
     METAMASK_PRIVATE_KEY=""
-    ETHERSCAN_API_KEY=""
+    BSCSCAN_API_KEY=""
     ```
-4.  Compile the smart contract (I explained the contract in detail with comment lines, first check it out.)
+4.  Compile the smart contract (Comprehensive contract details are provided with explanatory comments):
+
     ```sh
     npx hardhat compile
     ```
-5.  Deploy the smart contract (Examine the comment lines in the scripts.)
+
+5.  Test the smart contract (Optional):
+
+    ```sh
+    npx hardhat test
+    ```
+
+6.  Deploy the smart contract (Refer to comment lines in the scripts):
     ```sh
     npx hardhat run scripts/deploy.js --network testnet
     ```
-6.  Verify the smart contract (Optional)
+7.  Verify the smart contract (Optional):
 
     ```sh
     npx hardhat run scripts/verify.js --network testnet
     ```
 
-7.  Run the app
+8.  Run the app:
 
     ```sh
     npm run dev
@@ -82,7 +87,7 @@ https://wagmi.sh/react/getting-started
     yarn dev
     ```
 
-8.  Open the app in your browser
+9.  Open the app in your browser:
 
          http://localhost:3000
 
@@ -90,14 +95,18 @@ https://wagmi.sh/react/getting-started
 
 ## Usage
 
+With the Chat dApp, you can seamlessly:
+
 1.  Create a user account
 2.  Add friends
-3.  View friend lists
+3.  Explore friend lists
 4.  Search friends by username
-5.  Send messages
-6.  Read messages
+5.  Exchange messages
+6.  Read conversations
 
 ## Screenshots
+
+Explore the dApp's visual appeal through these screenshots:
 
 ![dApp Screenshot1](https://i.imgur.com/qNlEv39.png)
 ![dApp Screenshot2](https://i.imgur.com/uhtYJDq.png)
