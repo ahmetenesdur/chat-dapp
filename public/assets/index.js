@@ -2,7 +2,6 @@ import logo from "./logo.png";
 import close from "./close.png";
 import open from "./open.png";
 import search from "./search.png";
-import avatar from "./avatar.gif";
 import smile from "./smile.png";
 import send from "./send.png";
 import file from "./file.png";
@@ -19,23 +18,22 @@ import friends2 from "./friends2.png";
 import accountName from "./accountName.png";
 import dot from "./dot.png";
 import loader from "./loader.gif";
-import image1 from "./img1.gif";
-import image2 from "./img2.gif";
-import image3 from "./img3.gif";
-import image4 from "./img4.gif";
-import image5 from "./img5.gif";
-import image6 from "./img6.gif";
-import image7 from "./img7.gif";
-import image8 from "./img8.gif";
-import image9 from "./img9.gif";
-import image10 from "./img10.gif";
+import image1 from "./1.jpeg";
+import image2 from "./2.jpeg";
+import image3 from "./3.jpeg";
+import image4 from "./4.jpeg";
+import image5 from "./5.jpeg";
+import image6 from "./6.jpeg";
+import image7 from "./7.jpeg";
+import image8 from "./8.jpeg";
+import image9 from "./9.jpeg";
+import image10 from "./10.jpeg";
 
 export default {
   logo,
   close,
   open,
   search,
-  avatar,
   smile,
   send,
   file,
