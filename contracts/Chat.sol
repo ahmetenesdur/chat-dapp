@@ -2,80 +2,83 @@
 
 pragma solidity ^0.8.17;
 
-// Contract for creating chat functionality
 contract Chat {
-    // Struct for user data
-    struct user {
-        string name;
-        friend[] friendList;
+    struct User {
+        bytes32 name;
+        Friend[] friendList;
     }
 
-    // Struct for friend data
-    struct friend {
+    struct Friend {
         address pubkey;
-        string name;
+        bytes32 name;
     }
 
-    // Struct for message data
-    struct message {
+    struct Message {
         address sender;
         uint256 timestamp;
         string msg;
     }
 
-    // Struct for message data
     struct AllUserStruck {
-        string name;
+        bytes32 name;
         address accountAddress;
     }
 
-    // Array of all users
     AllUserStruck[] getAllUsers;
+    mapping(address => User) userList;
+    mapping(bytes32 => Message[]) allMessages;
 
-    // Mapping for user list
-    mapping(address => user) userList;
-    // Mapping for all messages
-    mapping(bytes32 => message[]) allMessages;
+    event MessageSent(bytes32 chatCode, Message msg);
 
-    // Function to check if user exists
     function checkUserExists(address pubkey) public view returns (bool) {
-        return bytes(userList[pubkey].name).length > 0;
+        return userList[pubkey].name != bytes32(0);
     }
 
-    // Function to create an account
+    function _stringToBytes32(
+        string memory source
+    ) internal pure returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
+        }
+
+        assembly {
+            result := mload(add(source, 32))
+        }
+    }
+
     function createAccount(string calldata name) external {
-        require(checkUserExists(msg.sender) == false, "User already exists");
-        require(bytes(name).length > 0, "Username cannot be empty");
+        bytes32 byteName = _stringToBytes32(name); // Convert string to bytes32 directly
+        require(!checkUserExists(msg.sender), "User already exists");
+        require(byteName != bytes32(0), "Username cannot be empty");
 
-        userList[msg.sender].name = name;
-
-        getAllUsers.push(AllUserStruck(name, msg.sender));
+        userList[msg.sender].name = byteName;
+        getAllUsers.push(AllUserStruck(byteName, msg.sender));
     }
 
-    // Function to get username
-    function getUsername(address pubkey) external view returns (string memory) {
+    function getUsername(address pubkey) external view returns (bytes32) {
         require(checkUserExists(pubkey), "User is not registered");
         return userList[pubkey].name;
     }
 
-    // Function to add a friend
     function addFriend(address friendKey, string calldata name) external {
         require(checkUserExists(msg.sender), "Create an account first");
-        require(checkUserExists(friendKey), "User is not registered!");
+        bool friendExists = checkUserExists(friendKey);
+        require(friendExists, "User is not registered!");
         require(
             msg.sender != friendKey,
             "Users cannot be friends with themselves"
         );
         require(
-            checkAlreadyFriends(msg.sender, friendKey) == false,
+            !checkAlreadyFriends(msg.sender, friendKey),
             "These users are already friends"
         );
 
-        _addFriend(msg.sender, friendKey, name);
+        bytes32 byteName = _stringToBytes32(name); // Convert string to bytes32 directly
+        _addFriend(msg.sender, friendKey, byteName);
         _addFriend(friendKey, msg.sender, userList[msg.sender].name);
     }
 
-    // Function to check if already friends
     function checkAlreadyFriends(
         address pubkey1,
         address pubkey2
@@ -84,9 +87,7 @@ contract Chat {
             userList[pubkey1].friendList.length >
             userList[pubkey2].friendList.length
         ) {
-            address tmp = pubkey1;
-            pubkey1 = pubkey2;
-            pubkey2 = tmp;
+            (pubkey1, pubkey2) = (pubkey2, pubkey1);
         }
 
         for (uint256 i = 0; i < userList[pubkey1].friendList.length; i++) {
@@ -95,32 +96,25 @@ contract Chat {
         return false;
     }
 
-    // Internal function to add a friend
-    function _addFriend(
-        address me,
-        address friendKey,
-        string memory name
-    ) internal {
-        friend memory newFriend = friend(friendKey, name);
+    function _addFriend(address me, address friendKey, bytes32 name) internal {
+        Friend memory newFriend = Friend(friendKey, name);
         userList[me].friendList.push(newFriend);
     }
 
-    // Function to get my friend list
-    function getMyFriendList() external view returns (friend[] memory) {
+    function getMyFriendList() external view returns (Friend[] memory) {
         return userList[msg.sender].friendList;
     }
 
-    // Internal function to get chat code
     function _getChatCode(
         address pubkey1,
         address pubkey2
     ) internal pure returns (bytes32) {
-        if (pubkey1 < pubkey2) {
-            return keccak256(abi.encodePacked(pubkey1, pubkey2));
-        } else return keccak256(abi.encodePacked(pubkey2, pubkey1));
+        return
+            (pubkey1 < pubkey2)
+                ? keccak256(abi.encodePacked(pubkey1, pubkey2))
+                : keccak256(abi.encodePacked(pubkey2, pubkey1));
     }
 
-    // Function to send a message
     function sendMessage(address friendKey, string calldata _message) external {
         require(checkUserExists(msg.sender), "Create an account first");
         require(checkUserExists(friendKey), "User is not registered!");
@@ -130,23 +124,21 @@ contract Chat {
         );
 
         bytes32 chatCode = _getChatCode(msg.sender, friendKey);
-        message memory newMessage = message(
+        Message memory newMessage = Message(
             msg.sender,
             block.timestamp,
             _message
         );
         allMessages[chatCode].push(newMessage);
+        emit MessageSent(chatCode, newMessage);
     }
 
-    // Function to read messages
     function readMessage(
         address friendKey
-    ) external view returns (message[] memory) {
-        bytes32 chatCode = _getChatCode(msg.sender, friendKey);
-        return allMessages[chatCode];
+    ) external view returns (Message[] memory) {
+        return allMessages[_getChatCode(msg.sender, friendKey)];
     }
 
-    // Function to get all user
     function getAllAppUser() public view returns (AllUserStruck[] memory) {
         return getAllUsers;
     }
