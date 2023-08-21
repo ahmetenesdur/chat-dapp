@@ -19,16 +19,22 @@ contract Chat {
         string msg;
     }
 
-    struct AllUserStruck {
+    struct AllUserStruct {
         bytes32 name;
         address accountAddress;
     }
 
-    AllUserStruck[] getAllUsers;
+    AllUserStruct[] getAllUsers;
     mapping(address => User) userList;
     mapping(bytes32 => Message[]) allMessages;
 
-    event MessageSent(bytes32 chatCode, Message msg);
+    event AccountCreated(address indexed userAddress, bytes32 name);
+    event FriendAdded(
+        address indexed userAddress,
+        address indexed friendAddress
+    );
+    event MessageSent(bytes32 indexed chatCode, Message msg);
+    event MessageDeleted(bytes32 indexed chatCode, uint256 index);
 
     function checkUserExists(address pubkey) public view returns (bool) {
         return userList[pubkey].name != bytes32(0);
@@ -48,12 +54,14 @@ contract Chat {
     }
 
     function createAccount(string calldata name) external {
-        bytes32 byteName = _stringToBytes32(name); // Convert string to bytes32 directly
+        bytes32 byteName = _stringToBytes32(name);
         require(!checkUserExists(msg.sender), "User already exists");
         require(byteName != bytes32(0), "Username cannot be empty");
 
         userList[msg.sender].name = byteName;
-        getAllUsers.push(AllUserStruck(byteName, msg.sender));
+        getAllUsers.push(AllUserStruct(byteName, msg.sender));
+
+        emit AccountCreated(msg.sender, byteName);
     }
 
     function getUsername(address pubkey) external view returns (bytes32) {
@@ -77,6 +85,8 @@ contract Chat {
         bytes32 byteName = _stringToBytes32(name); // Convert string to bytes32 directly
         _addFriend(msg.sender, friendKey, byteName);
         _addFriend(friendKey, msg.sender, userList[msg.sender].name);
+
+        emit FriendAdded(msg.sender, friendKey);
     }
 
     function checkAlreadyFriends(
@@ -130,7 +140,24 @@ contract Chat {
             _message
         );
         allMessages[chatCode].push(newMessage);
+
         emit MessageSent(chatCode, newMessage);
+    }
+
+    function deleteMessage(address friendKey, uint256 index) external {
+        bytes32 chatCode = _getChatCode(msg.sender, friendKey);
+        require(index < allMessages[chatCode].length, "Index out of bounds");
+        require(
+            allMessages[chatCode][index].sender == msg.sender,
+            "Only the sender can delete their messages"
+        );
+
+        for (uint256 i = index; i < allMessages[chatCode].length - 1; i++) {
+            allMessages[chatCode][i] = allMessages[chatCode][i + 1];
+        }
+
+        allMessages[chatCode].pop();
+        emit MessageDeleted(chatCode, index);
     }
 
     function readMessage(
@@ -139,7 +166,7 @@ contract Chat {
         return allMessages[_getChatCode(msg.sender, friendKey)];
     }
 
-    function getAllAppUser() public view returns (AllUserStruck[] memory) {
+    function getAllAppUser() public view returns (AllUserStruct[] memory) {
         return getAllUsers;
     }
 }

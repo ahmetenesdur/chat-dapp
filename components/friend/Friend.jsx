@@ -10,6 +10,7 @@ const Friend = () => {
 
   const {
     sendMessage,
+    deleteMessage,
     friendLists,
     readMessage,
     userName,
@@ -52,6 +53,7 @@ const Friend = () => {
         <div className="sm:col-span-2">
           <Chat
             sendMessage={sendMessage}
+            deleteMessage={deleteMessage}
             readMessage={readMessage}
             friendMsg={friendMsg}
             account={address}
