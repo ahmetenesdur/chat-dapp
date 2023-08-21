@@ -150,7 +150,7 @@ const NavBar = () => {
             <Model
               openBox={setOpenModel}
               title="WELCOME TO"
-              head="CHAT BUDDY"
+              head="BNB CHAT"
               info="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate maxime assumenda exercitationem voluptatibus, vero aliquid in tempore aut, impedit dolores voluptate recusandae nulla fuga? Praesentium iusto mollitia sint fugit! Placeat?"
               smallInfo="Secret Key is used to encrypt your messages. Please keep it safe."
               image={images.hero}

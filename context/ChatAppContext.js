@@ -1,7 +1,8 @@
 import { useState, useEffect, createContext } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
+import { ethers } from "ethers"; // For conversion functions
 
 import getContract from "../utils/getContract";
 
@@ -9,6 +10,7 @@ export const ChatAppContext = createContext();
 
 export const ChatAppProvider = ({ children }) => {
   const { address, isConnected, isDisconnected } = useAccount();
+  const router = useRouter();
 
   // UseStates
   const [userName, setUserName] = useState("");
@@ -22,34 +24,52 @@ export const ChatAppProvider = ({ children }) => {
   const [currentUserName, setCurrentUserName] = useState("");
   const [currentUserAddress, setCurrentUserAddress] = useState("");
 
-  const router = useRouter();
+  // Convert string to bytes32
+  const toBytes32 = (str) => {
+    return ethers.utils.formatBytes32String(str);
+  };
+
+  // Convert bytes32 to string
+  const fromBytes32 = (bytes) => {
+    return ethers.utils.parseBytes32String(bytes);
+  };
 
   // Fetch Data from Blockchain
   const fetchData = async () => {
     try {
-      // Check if user is connected to wallet
       if (!isConnected) return;
-      // Get Contract Instance from utils/getContract.js
+
       const contract = getContract();
-      // Get User Name if exist
+
+      // Check the returned type from the contract. If it's not in bytes32 format anymore, adjust as needed.
       const userName = await contract.getUsername(address);
-      setUserName(userName);
-      // Get All Friends List
+      setUserName(fromBytes32(userName)); // This assumes you have a fromBytes32 utility function to convert bytes32 to string
+
       const friendLists = await contract.getMyFriendList();
-      setFriendLists(friendLists);
-      // Get All User List
-      const userList = await contract.getAllAppUser();
-      setUserLists(userList);
+      setFriendLists(friendLists); // If the returned result is already an array of addresses
+
+      // Fetch user list and convert names
+      const rawUserList = await contract.getAllAppUser();
+      const processedUserList = rawUserList.map((user) => {
+        return {
+          ...user,
+          name: fromBytes32(user.name), // Convert each user's name from bytes32 to string
+        };
+      });
+      setUserLists(processedUserList);
     } catch (error) {
-      toast.error("Please create account first");
+      console.error(error);
+      toast.error("Please create an account first");
     }
   };
 
   useEffect(() => {
     fetchData();
+
     if (isDisconnected) {
       window.location.reload();
     }
+
     // if address change setFriendMsg to empty array and currentUserName to empty string
     setFriendMsg([]);
     setCurrentUserName("");
@@ -70,9 +90,10 @@ export const ChatAppProvider = ({ children }) => {
   const createAccount = async ({ name }) => {
     if (!name || !address)
       return toast.error("Please enter your name and connect to wallet");
+
     try {
       const contract = getContract();
-      const getCreatedUser = await contract.createAccount(name);
+      const getCreatedUser = await contract.createAccount(name); // Convert string to bytes32
       setLoading(true);
       await getCreatedUser.wait();
       setLoading(false);
@@ -104,7 +125,9 @@ export const ChatAppProvider = ({ children }) => {
       window.location.reload();
       toast.success("Friend Added Successfully");
     } catch (error) {
-      toast.error("Please sure this address is having an account or you have already added this address as a friend");
+      toast.error(
+        "Please sure this address is having an account or you have already added this address as a friend"
+      );
     }
   };
 
@@ -129,8 +152,8 @@ export const ChatAppProvider = ({ children }) => {
   // Read User Info
   const readUser = async (userAddress) => {
     const contract = getContract();
-    const userName = await contract.getUsername(userAddress);
-    setCurrentUserName(userName);
+    const bytesUserName = await contract.getUsername(userAddress);
+    setCurrentUserName(fromBytes32(bytesUserName)); // Convert bytes32 to string
     setCurrentUserAddress(userAddress);
   };
 
@@ -143,6 +166,7 @@ export const ChatAppProvider = ({ children }) => {
         addFriends,
         sendMessage,
         readUser,
+        fromBytes32,
         userName,
         friendLists,
         friendMsg,

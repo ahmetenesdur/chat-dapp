@@ -1,10 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ethers } from "ethers";
 
 import images from "../../public/assets";
 
 const Card = ({ readMessage, friends, i, readUser }) => {
+  const fromBytes32 = (bytes) => {
+    return ethers.utils.parseBytes32String(bytes);
+  };
+
   return (
     <Link
       href={{
@@ -26,7 +31,7 @@ const Card = ({ readMessage, friends, i, readUser }) => {
           </div>
           <div className="flex gap-12">
             <div className="-mt-0">
-              <h4>{friends.name}</h4>
+              <h4>{fromBytes32(friends.name)}</h4>
               <small>
                 {friends.pubkey.slice(0, 8)}...{friends.pubkey.slice(-8)}
               </small>

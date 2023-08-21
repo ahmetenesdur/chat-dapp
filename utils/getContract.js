@@ -5,12 +5,19 @@ import Contract from "../artifacts/contracts/Chat.sol/Chat.json";
 import { contractAddress } from "../config";
 
 export default function getContract() {
-  // Create a new Web3Provider instance and pass it the window.ethereum object
-  // which is an instance of the Ethereum provider injected by MetaMask or other web3 providers
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  // Get the signer from the provider which is used to sign transactions sent from the current user's account
-  const signer = provider.getSigner();
+  // Check that window.ethereum is available
+  if (!window.ethereum) {
+    throw new Error(
+      "Ethereum provider is not detected. Install or enable MetaMask (or another web3 provider)."
+    );
+  }
 
+  // Create a new Web3Provider instance and pass it the window.ethereum object
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // Get the signer from the provider
+  const signer = provider.getSigner();
+  // Create and return a new instance of Contract connected to the signer
   const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+
   return contract;
 }
