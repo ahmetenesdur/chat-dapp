@@ -146,7 +146,7 @@ const NavBar = () => {
 
       {/* Model Component */}
       {openModel && (
-        <div className="block fixed z-50 bg-[#292F3F] inset-0 overflow-auto">
+        <div className="block fixed z-50 inset-0 overflow-auto">
           {
             <Model
               openBox={setOpenModel}

@@ -21,8 +21,9 @@ const Model = ({
   const { loading } = useContext(ChatAppContext);
 
   return (
-    <div className="w-[%90] m-4 sm:w-[%80] sm:m-16">
-      <div className="grid grid-cols-1 sm:grid-cols-2 sm:items-center">
+    // screen center model
+    <div className="fixed z-50 inset-0 overflow-auto  items-center flex justify-center bg-[#1f2937]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:items-center p-20">
         <div>
           <Image src={image} alt="buddy" width={700} height={700} />
         </div>

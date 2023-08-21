@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { formatRelative } from "date-fns";
 import { ethers } from "ethers";
+import { FaTrash } from "react-icons/fa";
 
 import images from "../../public/assets";
 import Loader from "../Loader";
@@ -81,7 +82,7 @@ const Chat = ({
                       width={50}
                       height={50}
                     />
-                    <span className="text-red-400">
+                    <span>
                       {fromBytes32(chatData.name)} {""}
                       <small className="text-xs">
                         {formatDate(message.timestamp)}
@@ -89,7 +90,7 @@ const Chat = ({
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-4 text-base mt-1">
+                  <div className="flex items-center gap-4 text-base mt-1 ">
                     <Image
                       src={images.accountName}
                       alt="image"
@@ -104,7 +105,11 @@ const Chat = ({
                 )}
                 <div
                   key={i + 1}
-                  className="flex justify-between items-center p-4 relative bg-[#66b3e8]/40 rounded-t-lg rounded-bl-lg mt-1"
+                  className={`flex justify-between items-center p-4 relative  rounded-t-lg rounded-bl-lg mt-1 ${
+                    message.sender !== chatData.address
+                      ? "bg-[#66b3e8]/25"
+                      : "bg-[#66b3e8]/50"
+                  }`}
                 >
                   <p>{message.msg}</p>
                   {message.sender !== chatData.address && (
@@ -117,7 +122,7 @@ const Chat = ({
                         })
                       }
                     >
-                      Delete
+                      <FaTrash size={18} />
                     </span>
                   )}
                 </div>

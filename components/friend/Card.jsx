@@ -36,7 +36,6 @@ const Card = ({ readMessage, friends, i, readUser }) => {
                 {friends.pubkey.slice(0, 8)}...{friends.pubkey.slice(-8)}
               </small>
             </div>
-            {/* be in line */}
             <div className="flex items-center gap-2 ml-auto">
               <small>{i + 1}</small>
             </div>
