@@ -53,7 +53,6 @@ const NavBar = () => {
           <div className="sm:flex sm:items-center sm:gap-8 sm:border-b-2 sm:border-solid sm:border-transparent sm:transition-all sm:duration-300 sm:ease-in-out hidden">
             {menuItems.map((items, i) => (
               <div
-                onClick={() => setActive(i + 1)}
                 key={i + 1}
                 className={`${
                   active == i + 1
@@ -61,7 +60,9 @@ const NavBar = () => {
                     : ""
                 }`}
               >
-                <Link href={items.link}>{items.menu}</Link>
+                <Link href={items.link} onClick={() => setActive(i + 1)}>
+                  {items.menu}
+                </Link>
               </div>
             ))}
           </div>

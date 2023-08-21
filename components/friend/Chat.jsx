@@ -2,12 +2,14 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { formatRelative } from "date-fns";
+import { ethers } from "ethers";
 
 import images from "../../public/assets";
 import Loader from "../Loader";
 
 const Chat = ({
   sendMessage,
+  deleteMessage,
   readMessage,
   friendMsg,
   userName,
@@ -25,6 +27,10 @@ const Chat = ({
   });
 
   const router = useRouter();
+
+  const fromBytes32 = (bytes) => {
+    return ethers.utils.parseBytes32String(bytes);
+  };
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,7 +82,7 @@ const Chat = ({
                       height={50}
                     />
                     <span className="text-red-400">
-                      {chatData.name} {""}
+                      {fromBytes32(chatData.name)} {""}
                       <small className="text-xs">
                         {formatDate(message.timestamp)}
                       </small>
@@ -96,14 +102,25 @@ const Chat = ({
                     </span>
                   </div>
                 )}
-                <p
-                  className="text-xs p-4 relative bg-[#66b3e8]/40 rounded-t-lg rounded-bl-lg mt-1"
+                <div
                   key={i + 1}
+                  className="flex justify-between items-center p-4 relative bg-[#66b3e8]/40 rounded-t-lg rounded-bl-lg mt-1"
                 >
-                  {message.msg}
-                  {""}
-                  {""}
-                </p>
+                  <p>{message.msg}</p>
+                  {message.sender !== chatData.address && (
+                    <span
+                      className="ml-2 cursor-pointer text-red-400 hover:text-red-600 align-right"
+                      onClick={() =>
+                        deleteMessage({
+                          friendAddress: chatData.address,
+                          index: i,
+                        })
+                      }
+                    >
+                      Delete
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>

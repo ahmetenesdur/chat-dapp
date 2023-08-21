@@ -149,6 +149,22 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
+  // Delete Message
+  const deleteMessage = async ({ friendAddress, index }) => {
+    try {
+      const contract = getContract();
+      const deleteTx = await contract.deleteMessage(friendAddress, index);
+      setLoading(true);
+      await deleteTx.wait();
+      setLoading(false);
+      // Reload friend messages to reflect changes
+      await readMessage(friendAddress);
+      toast.success("Message Deleted Successfully");
+    } catch (error) {
+      toast.error("Failed to delete message");
+    }
+  };
+
   // Read User Info
   const readUser = async (userAddress) => {
     const contract = getContract();
@@ -165,6 +181,7 @@ export const ChatAppProvider = ({ children }) => {
         createAccount,
         addFriends,
         sendMessage,
+        deleteMessage,
         readUser,
         fromBytes32,
         userName,
