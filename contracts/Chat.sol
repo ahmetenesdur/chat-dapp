@@ -17,6 +17,7 @@ contract Chat {
         address sender;
         uint256 timestamp;
         string msg;
+        bool deleted;
     }
 
     struct AllUserStruct {
@@ -82,7 +83,7 @@ contract Chat {
             "These users are already friends"
         );
 
-        bytes32 byteName = _stringToBytes32(name); // Convert string to bytes32 directly
+        bytes32 byteName = _stringToBytes32(name);
         _addFriend(msg.sender, friendKey, byteName);
         _addFriend(friendKey, msg.sender, userList[msg.sender].name);
 
@@ -137,7 +138,8 @@ contract Chat {
         Message memory newMessage = Message(
             msg.sender,
             block.timestamp,
-            _message
+            _message,
+            false
         );
         allMessages[chatCode].push(newMessage);
 
@@ -152,11 +154,8 @@ contract Chat {
             "Only the sender can delete their messages"
         );
 
-        for (uint256 i = index; i < allMessages[chatCode].length - 1; i++) {
-            allMessages[chatCode][i] = allMessages[chatCode][i + 1];
-        }
+        allMessages[chatCode][index].deleted = true;
 
-        allMessages[chatCode].pop();
         emit MessageDeleted(chatCode, index);
     }
 
