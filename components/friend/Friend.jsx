@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { useAccount } from "wagmi";
+import { ethers } from "ethers";
 
 import Card from "./Card";
 import Chat from "./Chat";
@@ -23,15 +24,21 @@ const Friend = () => {
     search,
   } = useContext(ChatAppContext);
 
+  const fromBytes32 = (bytes) => {
+    return ethers.utils.parseBytes32String(bytes);
+  };
+
   return (
     <div className="sm:w-4/5 text-white w-11/12 m-4 mx-auto">
       <div className="grid-cols-1 sm:grid-cols-3 grid gap-8">
         <div className="bg-black/25 p-4 rounded-lg overflow-auto scrollbar-hide h-[454.8px]">
           {search
             ? friendLists
-                .filter((friend) =>
-                  friend.name.toLowerCase().includes(search.toLowerCase())
-                )
+                .filter((friend) => {
+                  return fromBytes32(friend.name)
+                    .toLowerCase()
+                    .includes(search.toLowerCase());
+                })
                 .map((friends, i) => (
                   <Card
                     key={i + 1}
