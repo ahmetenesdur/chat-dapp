@@ -48,7 +48,7 @@ const Chat = ({
       readMessage(chatData.address);
       readUser(chatData.address);
     }
-  }, [chatData.address]);
+  }, [chatData.address, readMessage, readUser]);
 
   const formatDate = (blockTimestamp) => {
     const date = new Date(blockTimestamp * 1000);
@@ -145,6 +145,7 @@ const Chat = ({
                 className="w-full p-4 text-white rounded-lg bg-[#66b3e8]/25 outline-0 border-0 focus:ring-0"
                 type="text"
                 placeholder="Type a message"
+                value={message} // bind the input value to the message state
                 onChange={(e) => setMessage(e.target.value)}
               />
               <Image
@@ -163,9 +164,10 @@ const Chat = ({
                   alt="file"
                   width={50}
                   height={50}
-                  onClick={() =>
-                    sendMessage({ msg: message, address: chatData.address })
-                  }
+                  onClick={() => {
+                    sendMessage({ msg: message, address: chatData.address });
+                    setMessage(""); // clear the input field}
+                  }}
                 />
               )}
             </div>

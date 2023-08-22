@@ -68,7 +68,12 @@ const Model = ({
               <div className="grid grid-cols-1 z-50 sm:grid-cols-2 gap-4 sm:mx-4">
                 <button
                   className="outline-none border-none text-xl font-bold text-[#66b3e8] bg-black/25 p-4 border-2 rounded-lg flex items-center justify-center gap-4 cursor-pointer hover:bg-[#30556e] hover:text-white"
-                  onClick={() => functionName({ name, userAddress })}
+                  onClick={async () => {
+                    await functionName({ name, userAddress });
+                    if (!loading) {
+                      openBox(false);
+                    }
+                  }}
                 >
                   {""}
                   <Image src={images.send} alt="send" width={30} height={30} />

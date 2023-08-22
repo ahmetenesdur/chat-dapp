@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
@@ -35,7 +35,7 @@ export const ChatAppProvider = ({ children }) => {
   };
 
   // Fetch Data from Blockchain
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       if (!isConnected) return;
 
@@ -61,7 +61,7 @@ export const ChatAppProvider = ({ children }) => {
       console.error(error);
       toast.error("Please create an account first");
     }
-  };
+  }, [address, isConnected]);
 
   useEffect(() => {
     fetchData();
@@ -73,7 +73,7 @@ export const ChatAppProvider = ({ children }) => {
     // if address change setFriendMsg to empty array and currentUserName to empty string
     setFriendMsg([]);
     setCurrentUserName("");
-  }, [address]);
+  }, [address, fetchData]);
 
   // Read Message
   const readMessage = async (friendAddress) => {
@@ -97,7 +97,7 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await getCreatedUser.wait();
       setLoading(false);
-      window.location.reload();
+      fetchData(); // Refresh data after creating an account.
       toast.success("Account Created Successfully");
     } catch (error) {
       toast.error("Please try again later or connect to wallet");
@@ -121,8 +121,7 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await addMyFriend.wait();
       setLoading(false);
-      router.push("/");
-      window.location.reload();
+      fetchData(); // Refresh data after adding a friend.
       toast.success("Friend Added Successfully");
     } catch (error) {
       toast.error(
@@ -139,11 +138,8 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await addMessage.wait();
       setLoading(false);
-      window.location.reload();
-      // wait 5 seconds and then show success message
-      setTimeout(() => {
-        toast.success("Message Sent Successfully");
-      }, 100);
+      await readMessage(address);
+      toast.success("Message Sent Successfully");
     } catch (error) {
       toast.error("Something went wrong, please try again later");
     }
@@ -157,8 +153,7 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await deleteTx.wait();
       setLoading(false);
-      // Reload friend messages to reflect changes
-      await readMessage(friendAddress);
+      await readMessage(friendAddress); // Refresh messages after deletion.
       toast.success("Message Deleted Successfully");
     } catch (error) {
       toast.error("Failed to delete message");
