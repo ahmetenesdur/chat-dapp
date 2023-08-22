@@ -13,6 +13,7 @@ const Chat = ({
   deleteMessage,
   readMessage,
   friendMsg,
+  setFriendMsg,
   userName,
   loading,
   currentUserName,
@@ -31,6 +32,13 @@ const Chat = ({
 
   const fromBytes32 = (bytes) => {
     return ethers.utils.parseBytes32String(bytes);
+  };
+
+  const handleDeleteMessage = async (params) => {
+    await deleteMessage(params);
+    setFriendMsg((prevMsgs) =>
+      prevMsgs.filter((_, index) => index !== params.index)
+    );
   };
 
   useEffect(() => {
@@ -72,62 +80,67 @@ const Chat = ({
       <div className="mt-8 px-8">
         <div className="grid grid-cols-1 m-0 overflow-auto scrollbar-hide h-[50vh]">
           <div>
-            {friendMsg.map((message, i) => (
-              <div ref={bottomRef} key={i + 1}>
-                {message.sender == chatData.address ? (
-                  <div className="flex items-center gap-4 text-base mt-1">
-                    <Image
-                      src={images.accountName}
-                      alt="image"
-                      width={50}
-                      height={50}
-                    />
-                    <span>
-                      {fromBytes32(chatData.name)} {""}
-                      <small className="text-xs">
-                        {formatDate(message.timestamp)}
-                      </small>
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-4 text-base mt-1 ">
-                    <Image
-                      src={images.accountName}
-                      alt="image"
-                      width={50}
-                      height={50}
-                    />
-                    <span className="relative">
-                      {userName} {""}
-                      <small>{formatDate(message.timestamp)}</small>
-                    </span>
-                  </div>
-                )}
-                <div
-                  key={i + 1}
-                  className={`flex justify-between items-center p-4 relative  rounded-t-lg rounded-bl-lg mt-1 ${
-                    message.sender !== chatData.address
-                      ? "bg-[#66b3e8]/25"
-                      : "bg-[#66b3e8]/50"
-                  }`}
-                >
-                  <p>{message.msg}</p>
-                  {message.sender !== chatData.address && (
-                    <span
-                      className="ml-2 cursor-pointer text-red-400 hover:text-red-600 align-right"
-                      onClick={() =>
-                        deleteMessage({
-                          friendAddress: chatData.address,
-                          index: i,
-                        })
-                      }
-                    >
-                      <FaTrash size={18} />
-                    </span>
+            {friendMsg.map((message, i) => {
+              if (message.deleted) {
+                return null;
+              }
+              return (
+                <div ref={bottomRef} key={i + 1}>
+                  {message.sender == chatData.address ? (
+                    <div className="flex items-center gap-4 text-base mt-1">
+                      <Image
+                        src={images.accountName}
+                        alt="image"
+                        width={50}
+                        height={50}
+                      />
+                      <span>
+                        {fromBytes32(chatData.name)} {""}
+                        <small className="text-xs">
+                          {formatDate(message.timestamp)}
+                        </small>
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-4 text-base mt-1 ">
+                      <Image
+                        src={images.accountName}
+                        alt="image"
+                        width={50}
+                        height={50}
+                      />
+                      <span className="relative">
+                        {userName} {""}
+                        <small>{formatDate(message.timestamp)}</small>
+                      </span>
+                    </div>
                   )}
+                  <div
+                    key={i + 1}
+                    className={`flex justify-between items-center p-4 relative  rounded-t-lg rounded-bl-lg mt-1 ${
+                      message.sender !== chatData.address
+                        ? "bg-[#66b3e8]/25"
+                        : "bg-[#66b3e8]/50"
+                    }`}
+                  >
+                    <p>{message.msg}</p>
+                    {message.sender !== chatData.address && (
+                      <span
+                        className="ml-2 cursor-pointer text-red-400 hover:text-red-600 align-right"
+                        onClick={() =>
+                          handleDeleteMessage({
+                            friendAddress: chatData.address,
+                            index: i,
+                          })
+                        }
+                      >
+                        <FaTrash size={18} />
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

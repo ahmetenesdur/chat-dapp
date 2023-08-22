@@ -16,6 +16,7 @@ const Friend = () => {
     userName,
     loading,
     friendMsg,
+    setFriendMsg,
     currentUserName,
     currentUserAddress,
     readUser,
@@ -56,6 +57,7 @@ const Friend = () => {
             deleteMessage={deleteMessage}
             readMessage={readMessage}
             friendMsg={friendMsg}
+            setFriendMsg={setFriendMsg}
             account={address}
             userName={userName}
             loading={loading}

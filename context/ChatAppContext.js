@@ -80,6 +80,13 @@ export const ChatAppProvider = ({ children }) => {
     try {
       const contract = getContract();
       const read = await contract.readMessage(friendAddress);
+      console.log("readRaw", read);
+      console.log(
+        "read",
+        read.map((message, i) => {
+          if (!message.deleted) return message.msg;
+        })
+      );
       setFriendMsg(read);
     } catch (error) {
       toast.error("Please connect to wallet");
@@ -122,6 +129,7 @@ export const ChatAppProvider = ({ children }) => {
       await addMyFriend.wait();
       setLoading(false);
       fetchData(); // Refresh data after adding a friend.
+      router.push("/");
       toast.success("Friend Added Successfully");
     } catch (error) {
       toast.error(
@@ -182,6 +190,7 @@ export const ChatAppProvider = ({ children }) => {
         userName,
         friendLists,
         friendMsg,
+        setFriendMsg,
         userLists,
         loading,
         currentUserName,
