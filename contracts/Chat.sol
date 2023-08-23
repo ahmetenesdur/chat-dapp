@@ -25,7 +25,7 @@ contract Chat {
         address accountAddress;
     }
 
-    AllUserStruct[] getAllUsers;
+    AllUserStruct[] allUsers;
     mapping(address => User) userList;
     mapping(bytes32 => Message[]) allMessages;
     mapping(address => bool) existingUsers;
@@ -38,6 +38,11 @@ contract Chat {
     event MessageSent(bytes32 indexed chatCode, Message msg);
     event MessageDeleted(bytes32 indexed chatCode, uint256 index);
 
+    modifier userExists(address pubkey) {
+        require(checkUserExists(pubkey), "User is not registered");
+        _;
+    }
+
     function checkUserExists(address pubkey) public view returns (bool) {
         return existingUsers[pubkey];
     }
@@ -45,6 +50,8 @@ contract Chat {
     function _stringToBytes32(
         string memory source
     ) internal pure returns (bytes32 result) {
+        require(bytes(source).length <= 32, "String too long");
+
         bytes memory tempEmptyStringTest = bytes(source);
         if (tempEmptyStringTest.length == 0) {
             return 0x0;
@@ -56,26 +63,28 @@ contract Chat {
     }
 
     function createAccount(string calldata name) external {
-        bytes32 byteName = _stringToBytes32(name);
         require(!checkUserExists(msg.sender), "User already exists");
+
+        bytes32 byteName = _stringToBytes32(name);
         require(byteName != bytes32(0), "Username cannot be empty");
 
         userList[msg.sender].name = byteName;
         existingUsers[msg.sender] = true;
-        getAllUsers.push(AllUserStruct(byteName, msg.sender));
+        allUsers.push(AllUserStruct(byteName, msg.sender));
 
         emit AccountCreated(msg.sender, byteName);
     }
 
-    function getUsername(address pubkey) external view returns (bytes32) {
-        require(checkUserExists(pubkey), "User is not registered");
+    function getUsername(
+        address pubkey
+    ) external view userExists(pubkey) returns (bytes32) {
         return userList[pubkey].name;
     }
 
-    function addFriend(address friendKey, string calldata name) external {
-        require(checkUserExists(msg.sender), "Create an account first");
-        bool friendExists = checkUserExists(friendKey);
-        require(friendExists, "User is not registered!");
+    function addFriend(
+        address friendKey,
+        string calldata name
+    ) external userExists(msg.sender) userExists(friendKey) {
         require(
             msg.sender != friendKey,
             "Users cannot be friends with themselves"
@@ -128,9 +137,10 @@ contract Chat {
                 : keccak256(abi.encodePacked(pubkey2, pubkey1));
     }
 
-    function sendMessage(address friendKey, string calldata _message) external {
-        require(checkUserExists(msg.sender), "Create an account first");
-        require(checkUserExists(friendKey), "User is not registered!");
+    function sendMessage(
+        address friendKey,
+        string calldata _message
+    ) external userExists(msg.sender) userExists(friendKey) {
         require(
             checkAlreadyFriends(msg.sender, friendKey),
             "These users are not friends"
@@ -168,6 +178,6 @@ contract Chat {
     }
 
     function getAllAppUser() public view returns (AllUserStruct[] memory) {
-        return getAllUsers;
+        return allUsers;
     }
 }
