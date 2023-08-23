@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { formatRelative } from "date-fns";
 import { ethers } from "ethers";
 import { FaTrash } from "react-icons/fa";

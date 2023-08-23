@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useCallback } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { ethers } from "ethers"; // For conversion functions
@@ -67,7 +67,14 @@ export const ChatAppProvider = ({ children }) => {
     fetchData();
 
     if (isDisconnected) {
-      window.location.reload();
+      router.push("/");
+
+      setUserName("");
+      setFriendLists([]);
+      setFriendMsg([]);
+      setUserLists([]);
+      setCurrentUserName("");
+      setCurrentUserAddress("");
     }
 
     // if address change setFriendMsg to empty array and currentUserName to empty string
@@ -80,13 +87,6 @@ export const ChatAppProvider = ({ children }) => {
     try {
       const contract = getContract();
       const read = await contract.readMessage(friendAddress);
-      console.log("readRaw", read);
-      console.log(
-        "read",
-        read.map((message, i) => {
-          if (!message.deleted) return message.msg;
-        })
-      );
       setFriendMsg(read);
     } catch (error) {
       toast.error("Please connect to wallet");

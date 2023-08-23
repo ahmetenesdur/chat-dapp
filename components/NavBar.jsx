@@ -31,11 +31,8 @@ const NavBar = () => {
   //currentPage
   useEffect(() => {
     const currentPage = window.location.pathname;
-    if (currentPage == "/") {
-      setActive(2);
-    } else if (currentPage == "/alluser") {
-      setActive(1);
-    }
+    if (currentPage == "/alluser") setActive(1);
+    else if (currentPage == "/") setActive(2);
   }, []);
 
   return (
