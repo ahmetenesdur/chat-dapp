@@ -28,6 +28,7 @@ contract Chat {
     AllUserStruct[] getAllUsers;
     mapping(address => User) userList;
     mapping(bytes32 => Message[]) allMessages;
+    mapping(address => bool) existingUsers;
 
     event AccountCreated(address indexed userAddress, bytes32 name);
     event FriendAdded(
@@ -38,7 +39,7 @@ contract Chat {
     event MessageDeleted(bytes32 indexed chatCode, uint256 index);
 
     function checkUserExists(address pubkey) public view returns (bool) {
-        return userList[pubkey].name != bytes32(0);
+        return existingUsers[pubkey];
     }
 
     function _stringToBytes32(
@@ -60,6 +61,7 @@ contract Chat {
         require(byteName != bytes32(0), "Username cannot be empty");
 
         userList[msg.sender].name = byteName;
+        existingUsers[msg.sender] = true;
         getAllUsers.push(AllUserStruct(byteName, msg.sender));
 
         emit AccountCreated(msg.sender, byteName);
