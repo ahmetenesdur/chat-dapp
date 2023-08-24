@@ -35,16 +35,16 @@ contract Chat {
         address indexed userAddress,
         address indexed friendAddress
     );
+    event FriendRemoved(
+        address indexed userAddress,
+        address indexed friendAddress
+    );
     event MessageSent(bytes32 indexed chatCode, Message msg);
     event MessageDeleted(bytes32 indexed chatCode, uint256 index);
 
     modifier userExists(address pubkey) {
         require(checkUserExists(pubkey), "User is not registered");
         _;
-    }
-
-    function checkUserExists(address pubkey) public view returns (bool) {
-        return existingUsers[pubkey];
     }
 
     function _stringToBytes32(
@@ -60,6 +60,36 @@ contract Chat {
         assembly {
             result := mload(add(source, 32))
         }
+    }
+
+    function _addFriend(address me, address friendKey, bytes32 name) internal {
+        Friend memory newFriend = Friend(friendKey, name);
+        userList[me].friendList.push(newFriend);
+    }
+
+    function _removeFriend(address me, address friendKey) internal {
+        Friend[] storage friends = userList[me].friendList;
+        for (uint256 i = 0; i < friends.length; i++) {
+            if (friends[i].pubkey == friendKey) {
+                friends[i] = friends[friends.length - 1];
+                friends.pop();
+                break;
+            }
+        }
+    }
+
+    function _getChatCode(
+        address pubkey1,
+        address pubkey2
+    ) internal pure returns (bytes32) {
+        return
+            (pubkey1 < pubkey2)
+                ? keccak256(abi.encodePacked(pubkey1, pubkey2))
+                : keccak256(abi.encodePacked(pubkey2, pubkey1));
+    }
+
+    function checkUserExists(address pubkey) public view returns (bool) {
+        return existingUsers[pubkey];
     }
 
     function createAccount(string calldata name) external {
@@ -101,6 +131,21 @@ contract Chat {
         emit FriendAdded(msg.sender, friendKey);
     }
 
+    function removeFriend(
+        address friendKey
+    ) external userExists(msg.sender) userExists(friendKey) {
+        require(msg.sender != friendKey, "Users cannot remove themselves");
+        require(
+            checkAlreadyFriends(msg.sender, friendKey),
+            "These users are not friends"
+        );
+
+        _removeFriend(msg.sender, friendKey);
+        _removeFriend(friendKey, msg.sender);
+
+        emit FriendRemoved(msg.sender, friendKey);
+    }
+
     function checkAlreadyFriends(
         address pubkey1,
         address pubkey2
@@ -118,23 +163,8 @@ contract Chat {
         return false;
     }
 
-    function _addFriend(address me, address friendKey, bytes32 name) internal {
-        Friend memory newFriend = Friend(friendKey, name);
-        userList[me].friendList.push(newFriend);
-    }
-
     function getMyFriendList() external view returns (Friend[] memory) {
         return userList[msg.sender].friendList;
-    }
-
-    function _getChatCode(
-        address pubkey1,
-        address pubkey2
-    ) internal pure returns (bytes32) {
-        return
-            (pubkey1 < pubkey2)
-                ? keccak256(abi.encodePacked(pubkey1, pubkey2))
-                : keccak256(abi.encodePacked(pubkey2, pubkey1));
     }
 
     function sendMessage(
