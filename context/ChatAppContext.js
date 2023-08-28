@@ -20,6 +20,7 @@ export const ChatAppProvider = ({ children }) => {
   const [userLists, setUserLists] = useState([]);
   const [search, setSearch] = useState("");
 
+
   // Current User Info
   const [currentUserName, setCurrentUserName] = useState("");
   const [currentUserAddress, setCurrentUserAddress] = useState("");
@@ -32,6 +33,15 @@ export const ChatAppProvider = ({ children }) => {
   // Convert bytes32 to string
   const fromBytes32 = (bytes) => {
     return ethers.utils.parseBytes32String(bytes);
+  };
+
+  const clear = () => {
+    setUserName("");
+    setFriendLists([]);
+    setFriendMsg([]);
+    setUserLists([]);
+    setCurrentUserName("");
+    setCurrentUserAddress("");
   };
 
   // Fetch Data from Blockchain
@@ -68,19 +78,13 @@ export const ChatAppProvider = ({ children }) => {
 
     if (isDisconnected) {
       router.push("/");
-
-      setUserName("");
-      setFriendLists([]);
-      setFriendMsg([]);
-      setUserLists([]);
-      setCurrentUserName("");
-      setCurrentUserAddress("");
+      clear();
     }
 
     // if address change setFriendMsg to empty array and currentUserName to empty string
     setFriendMsg([]);
     setCurrentUserName("");
-  }, [address, fetchData]);
+  }, [address, fetchData, isDisconnected, router]);
 
   // Read Message
   const readMessage = async (friendAddress) => {
@@ -100,19 +104,25 @@ export const ChatAppProvider = ({ children }) => {
 
     try {
       const contract = getContract();
-      const getCreatedUser = await contract.createAccount(name); // Convert string to bytes32
+      const getCreatedUser = await contract.createAccount(name); // Convert string to bytes32 before sending
       setLoading(true);
       await getCreatedUser.wait();
       setLoading(false);
       fetchData(); // Refresh data after creating an account.
       toast.success("Account Created Successfully");
     } catch (error) {
+      console.error(error);
       toast.error("Please try again later or connect to wallet");
     }
   };
 
   // Add Friends
   const addFriends = async ({ name, userAddress }) => {
+    if (!name || !userAddress)
+      return toast.error(
+        "Please provide the name and address of the user you wish to add."
+      );
+
     try {
       if (friendLists.includes(userAddress)) {
         toast.error("You are already friends with this user");
@@ -132,9 +142,25 @@ export const ChatAppProvider = ({ children }) => {
       router.push("/");
       toast.success("Friend Added Successfully");
     } catch (error) {
+      console.error(error);
       toast.error(
-        "Please sure this address is having an account or you have already added this address as a friend"
+        "Ensure this address has an account and hasn't been added as a friend already"
       );
+    }
+  };
+
+  // Remove Friend function
+  const removeFriend = async (friendAddress) => {
+    try {
+      const contract = getContract();
+      const removeTx = await contract.removeFriend(friendAddress);
+      setLoading(true);
+      await removeTx.wait();
+      setLoading(false);
+      fetchData(); // Refresh friend list after removing a friend.
+      toast.success("Friend Removed Successfully");
+    } catch (error) {
+      toast.error("Failed to remove friend");
     }
   };
 
@@ -149,6 +175,7 @@ export const ChatAppProvider = ({ children }) => {
       await readMessage(address);
       toast.success("Message Sent Successfully");
     } catch (error) {
+      console.error(error);
       toast.error("Something went wrong, please try again later");
     }
   };
@@ -183,10 +210,12 @@ export const ChatAppProvider = ({ children }) => {
         readMessage,
         createAccount,
         addFriends,
+        removeFriend,
         sendMessage,
         deleteMessage,
         readUser,
         fromBytes32,
+        clear,
         userName,
         friendLists,
         friendMsg,

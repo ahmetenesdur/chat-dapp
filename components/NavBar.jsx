@@ -3,7 +3,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
 import { useAccount, useDisconnect } from "wagmi";
-
+import { useRouter } from "next/router";
 import { ChatAppContext } from "../context/ChatAppContext";
 import Model from "./Model";
 import images from "../public/assets";
@@ -20,20 +20,24 @@ const NavBar = () => {
     },
   ];
 
-  const [active, setActive] = useState();
+  const [active, setActive] = useState(null);
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
   const { address, isConnected } = useAccount();
   const { userName, createAccount } = useContext(ChatAppContext);
   const { disconnect } = useDisconnect();
+  const router = useRouter();
 
-  //currentPage
+  // Check if user is connected to wallet and set active menu
   useEffect(() => {
-    const currentPage = window.location.pathname;
-    if (currentPage == "/alluser") setActive(1);
-    else if (currentPage == "/") setActive(2);
-  }, []);
+    const currentPage = router.pathname;
+    const newActive =
+      currentPage === "/alluser" ? 1 : currentPage === "/" ? 2 : null;
+    if (newActive !== null) {
+      setActive(newActive);
+    }
+  }, [router]);
 
   return (
     <div className="sm:relative sm:w-4/5 sm:mx-auto text-white w-11/12 m-4 mx-auto">

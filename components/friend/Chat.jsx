@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { formatRelative } from "date-fns";
 import { ethers } from "ethers";
 import { FaTrash } from "react-icons/fa";
@@ -43,7 +43,7 @@ const Chat = ({
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [friendMsg]);
+  }, []);
 
   useEffect(() => {
     if (router.query) {
@@ -56,7 +56,7 @@ const Chat = ({
       readMessage(chatData.address);
       readUser(chatData.address);
     }
-  }, [chatData.address, readMessage, readUser]);
+  }, [chatData.address]);
 
   const formatDate = (blockTimestamp) => {
     const date = new Date(blockTimestamp * 1000);

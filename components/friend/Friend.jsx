@@ -14,6 +14,7 @@ const Friend = () => {
     deleteMessage,
     friendLists,
     readMessage,
+    removeFriend,
     userName,
     loading,
     friendMsg,
@@ -22,6 +23,7 @@ const Friend = () => {
     currentUserAddress,
     readUser,
     search,
+    clear,
   } = useContext(ChatAppContext);
 
   const fromBytes32 = (bytes) => {
@@ -46,6 +48,8 @@ const Friend = () => {
                     i={i}
                     readMessage={readMessage}
                     readUser={readUser}
+                    removeFriend={removeFriend}
+                    clear={clear}
                   />
                 ))
             : friendLists.map((friends, i) => (
@@ -55,6 +59,8 @@ const Friend = () => {
                   i={i}
                   readMessage={readMessage}
                   readUser={readUser}
+                  removeFriend={removeFriend}
+                  clear={clear}
                 />
               ))}
         </div>
