@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 // The address of the smart contract to be verified
-const contractAddress = "0x5363Bae3a03CFDFC6Fdf6ADf70853347C6274789";
+const contractAddress = "0x8DaB19a81a1203aD0d35A4be93E44aDC54C08633";
 
 async function main() {
   // Use hardhat's "verify:verify" command to verify the contract at the specified address
