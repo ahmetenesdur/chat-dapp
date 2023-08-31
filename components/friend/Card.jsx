@@ -42,6 +42,7 @@ const Card = ({ readMessage, friends, i, readUser, removeFriend, clear }) => {
         <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#66b3e8] hover:bg-[#66b3e8]/50 hover:text-white">
           <div className="rounded-lg">
             <Image
+              className="rounded-lg"
               src={`https://ipfs.io/ipfs/${friends.ipfsHash}`}
               alt="username"
               width={50}
