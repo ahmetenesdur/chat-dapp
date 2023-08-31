@@ -5,38 +5,40 @@ import {
   RainbowKitProvider,
   connectorsForWallets,
   darkTheme,
-} from "@rainbow-me/rainbowkit";
+} from "@rainbow-me/rainbowkit"; // Import components and functions from RainbowKit
 import {
   argentWallet,
   trustWallet,
   ledgerWallet,
-} from "@rainbow-me/rainbowkit/wallets";
+} from "@rainbow-me/rainbowkit/wallets"; // Import wallet types from RainbowKit
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { bscTestnet } from "wagmi/chains";
+import { bscTestnet } from "wagmi/chains"; // Import BSC Testnet from wagmi chains
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { ChatAppProvider } from "../context/ChatAppContext";
+import { ChatAppProvider } from "../context/ChatAppContext"; // Import ChatAppProvider from context
 import NavBar from "@/components/NavBar";
 
+// Configure chains, providers, and clients using wagmi
 const { chains, provider, publicClient, webSocketPublicClient } =
   configureChains(
     [bscTestnet],
     [
       jsonRpcProvider({
         rpc: () => ({
-          http: process.env.NEXT_PUBLIC_RPC_URL,
+          http: process.env.NEXT_PUBLIC_RPC_URL, // Set the HTTP RPC URL from environment variables
         }),
       }),
       publicProvider(),
     ]
   );
 
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID;
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID; // Get the WalletConnect project ID from environment variables
 
+// Get default wallets using RainbowKit
 const { wallets } = getDefaultWallets({
   appName: "Chat Dapp",
   projectId,
@@ -47,6 +49,7 @@ const demoAppInfo = {
   appName: "Chat Dapp",
 };
 
+// Create connectors for wallets using RainbowKit
 const connectors = connectorsForWallets([
   ...wallets,
   {
@@ -59,6 +62,7 @@ const connectors = connectorsForWallets([
   },
 ]);
 
+// Create Wagmi configuration
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
@@ -67,13 +71,15 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
+// Main App component
 export default function App({ Component, pageProps }) {
   return (
     <WagmiConfig config={wagmiConfig}>
+      {/* Provide Wagmi configuration */}
       <RainbowKitProvider
         appInfo={demoAppInfo}
         chains={chains}
-        theme={darkTheme()}
+        theme={darkTheme()} // Set the dark theme
       >
         <ChatAppProvider>
           <ToastContainer
@@ -82,7 +88,7 @@ export default function App({ Component, pageProps }) {
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick
-            theme="dark"
+            theme="dark" // Use dark theme for react-toastify
           />
           <NavBar />
           <Component {...pageProps} />

@@ -6,6 +6,7 @@ import { ChatAppContext } from "../context/ChatAppContext";
 import Loader from "./Loader";
 import saveToIPFS from "../utils/saveToIPFS";
 
+// Defining the Model component
 const Model = ({
   openBox,
   title,
@@ -18,13 +19,16 @@ const Model = ({
   createAccount,
   addFriends,
 }) => {
+  // State variables
   const [name, setName] = useState("");
   const [userAddress, setUserAddress] = useState(address);
   const [profilePicture, setProfilePicture] = useState(null);
   const [pictureLoading, setPictureLoading] = useState(false);
 
+  // Using context
   const { loading, setLoading } = useContext(ChatAppContext);
 
+  // Function to handle form submission
   const submit = async () => {
     try {
       if (functionName === "createAccount") {

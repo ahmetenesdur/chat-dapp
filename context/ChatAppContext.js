@@ -6,37 +6,40 @@ import { ethers } from "ethers"; // For conversion functions
 
 import getContract from "../utils/getContract";
 
+// Create a context for the chat application
 export const ChatAppContext = createContext();
 
+// Provider component for the chat application context
 export const ChatAppProvider = ({ children }) => {
   const { address, isConnected, isDisconnected } = useAccount();
   const router = useRouter();
 
-  // UseStates
-  const [userName, setUserName] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
-  const [friendLists, setFriendLists] = useState([]);
-  const [friendMsg, setFriendMsg] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [userLists, setUserLists] = useState([]);
-  const [search, setSearch] = useState("");
+  // UseStates to manage various states in the app
+  const [userName, setUserName] = useState(""); // User's name
+  const [profilePicture, setProfilePicture] = useState(""); // User's profile picture
+  const [friendLists, setFriendLists] = useState([]); // User's list of friends
+  const [friendMsg, setFriendMsg] = useState([]); // Messages with a friend
+  const [loading, setLoading] = useState(false); // Loading state
+  const [userLists, setUserLists] = useState([]); // List of all app users
+  const [search, setSearch] = useState(""); // Search input
 
-  // Current User Info
-  const [currentUserName, setCurrentUserName] = useState("");
-  const [currentUserAddress, setCurrentUserAddress] = useState("");
+  // Current User Info states
+  const [currentUserName, setCurrentUserName] = useState(""); // Current friend's name
+  const [currentUserAddress, setCurrentUserAddress] = useState(""); // Current friend's address
 
-  // Convert string to bytes32
+  // Function to convert a string to bytes32 format
   const toBytes32 = (str) => {
     return ethers.utils.formatBytes32String(str);
   };
 
-  // Convert bytes32 to string
+  // Function to convert bytes32 format to string
   const fromBytes32 = (bytes) => {
     const result = ethers.utils.parseBytes32String(bytes);
     console.log("fromBytes32 result:", result);
     return result;
   };
 
+  // Function to clear all states
   const clear = () => {
     setUserName("");
     setFriendLists([]);
@@ -46,29 +49,31 @@ export const ChatAppProvider = ({ children }) => {
     setCurrentUserAddress("");
   };
 
-  // Fetch Data from Blockchain
+  // Fetch data from the blockchain using useCallback
   const fetchData = useCallback(async () => {
     try {
       if (!isConnected) return;
 
       const contract = getContract();
 
-      // Check the returned type from the contract. If it's not in bytes32 format anymore, adjust as needed.
+      // Fetch and update the user's name from the contract
       const userName = await contract.getUsername(address);
-      setUserName(fromBytes32(userName)); // This assumes you have a fromBytes32 utility function to convert bytes32 to string
+      setUserName(fromBytes32(userName));
 
-      const userPic = await contract.getUserProfilePic(address); // Get the profile picture from the smart contract
-      setProfilePicture(userPic); // Update the state with the retrieved profile picture
+      // Fetch and update the user's profile picture
+      const userPic = await contract.getUserProfilePic(address);
+      setProfilePicture(userPic);
 
+      // Fetch and update the user's friend list
       const friendLists = await contract.getMyFriendList();
-      setFriendLists(friendLists); // If the returned result is already an array of addresses
+      setFriendLists(friendLists);
 
-      // Fetch user list and convert names
+      // Fetch the raw user list and process user names
       const rawUserList = await contract.getAllAppUser();
       const processedUserList = rawUserList.map((user) => {
         return {
           ...user,
-          name: fromBytes32(user.name), // Convert each user's name from bytes32 to string
+          name: fromBytes32(user.name),
         };
       });
       setUserLists(processedUserList);
@@ -77,6 +82,7 @@ export const ChatAppProvider = ({ children }) => {
     }
   }, [address, isConnected]);
 
+  // useEffect to fetch data when needed
   useEffect(() => {
     fetchData();
 
@@ -85,12 +91,12 @@ export const ChatAppProvider = ({ children }) => {
       clear();
     }
 
-    // if address change setFriendMsg to empty array and currentUserName to empty string
+    // Reset friendMsg and currentUserName if address changes
     setFriendMsg([]);
     setCurrentUserName("");
   }, [address, fetchData, isDisconnected, router]);
 
-  // Read Message
+  // Function to read messages for a specific friend
   const readMessage = async (friendAddress) => {
     try {
       const contract = getContract();
@@ -101,33 +107,30 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  // Create Account
+  // Function to create a new user account
   const createAccount = async ({ name, picCid }) => {
     if (!name || !address || !picCid)
-      // Check for picCid value too
       return toast.error(
-        "Please enter your name, profile picture, and connect to wallet"
+        "Please enter name, profile picture, and connect to wallet"
       );
 
     try {
       const contract = getContract();
-      const getCreatedUser = await contract.createAccount(name, picCid); // Pass the picCid to the smart contract method
+      const getCreatedUser = await contract.createAccount(name, picCid);
       setLoading(true);
       await getCreatedUser.wait();
       setLoading(false);
-      fetchData(); // Refresh data after creating an account.
+      fetchData();
       toast.success("Account Created Successfully");
     } catch (error) {
       toast.error("Please try again later or connect to wallet");
     }
   };
 
-  // Add Friends
+  // Function to add a friend
   const addFriends = async ({ name, userAddress }) => {
     if (!name || !userAddress)
-      return toast.error(
-        "Please provide the name and address of the user you wish to add."
-      );
+      return toast.error("Please provide name and address of the user to add");
 
     try {
       if (friendLists.includes(userAddress)) {
@@ -144,7 +147,7 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await addMyFriend.wait();
       setLoading(false);
-      fetchData(); // Refresh data after adding a friend.
+      fetchData();
       router.push("/");
       toast.success("Friend Added Successfully");
     } catch (error) {
@@ -154,7 +157,7 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  // Remove Friend function
+  // Function to remove a friend
   const removeFriend = async (friendAddress) => {
     try {
       const contract = getContract();
@@ -162,14 +165,14 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await removeTx.wait();
       setLoading(false);
-      fetchData(); // Refresh friend list after removing a friend.
+      fetchData();
       toast.success("Friend Removed Successfully");
     } catch (error) {
       toast.error("Failed to remove friend");
     }
   };
 
-  // Send Message to Friends
+  // Function to send a message to a friend
   const sendMessage = async ({ msg, address }) => {
     try {
       const contract = getContract();
@@ -184,7 +187,7 @@ export const ChatAppProvider = ({ children }) => {
     }
   };
 
-  // Delete Message
+  // Function to delete a message
   const deleteMessage = async ({ friendAddress, index }) => {
     try {
       const contract = getContract();
@@ -192,23 +195,22 @@ export const ChatAppProvider = ({ children }) => {
       setLoading(true);
       await deleteTx.wait();
       setLoading(false);
-      await readMessage(friendAddress); // Refresh messages after deletion.
+      await readMessage(friendAddress);
       toast.success("Message Deleted Successfully");
     } catch (error) {
       toast.error("Failed to delete message");
     }
   };
 
-  // Read User Info
+  // Function to read user information
   const readUser = async (userAddress) => {
     const contract = getContract();
     const bytesUserName = await contract.getUsername(userAddress);
-    setCurrentUserName(fromBytes32(bytesUserName)); // Convert bytes32 to string
+    setCurrentUserName(fromBytes32(bytesUserName));
     setCurrentUserAddress(userAddress);
   };
 
   return (
-    // Provider for all children
     <ChatAppContext.Provider
       value={{
         readMessage,

@@ -3,18 +3,21 @@
 pragma solidity ^0.8.17;
 
 contract Chat {
+    // Define a struct to store user information
     struct User {
         bytes32 name;
         Friend[] friendList;
         string ipfsHash; // This will store the IPFS hash of the profile picture
     }
 
+    // Define a struct to store friend information
     struct Friend {
         address pubkey;
         bytes32 name;
         string ipfsHash;
     }
 
+    // Define a struct to store message information
     struct Message {
         address sender;
         uint256 timestamp;
@@ -22,17 +25,19 @@ contract Chat {
         bool deleted;
     }
 
+    // Define a struct to store information about all users
     struct AllUserStruct {
         bytes32 name;
         address accountAddress;
         string ipfsHash;
     }
 
-    AllUserStruct[] allUsers;
-    mapping(address => User) userList;
-    mapping(bytes32 => Message[]) allMessages;
-    mapping(address => bool) existingUsers;
+    AllUserStruct[] allUsers; // Array to store information about all users
+    mapping(address => User) userList; // Mapping to store user information based on address
+    mapping(bytes32 => Message[]) allMessages; // Mapping to store messages based on chat code
+    mapping(address => bool) existingUsers; // Mapping to check if a user exists
 
+    // Define events to be emitted
     event AccountCreated(address indexed userAddress, bytes32 name);
     event FriendAdded(
         address indexed userAddress,
@@ -45,11 +50,13 @@ contract Chat {
     event MessageSent(bytes32 indexed chatCode, Message msg);
     event MessageDeleted(bytes32 indexed chatCode, uint256 index);
 
+    // Modifier to check if a user exists
     modifier userExists(address pubkey) {
         require(checkUserExists(pubkey), "User is not registered");
         _;
     }
 
+    // Internal function to convert a string to bytes32
     function _stringToBytes32(
         string memory source
     ) internal pure returns (bytes32 result) {
@@ -65,6 +72,7 @@ contract Chat {
         }
     }
 
+    // Internal function to add a friend
     function _addFriend(address me, address friendKey, bytes32 name) internal {
         Friend memory newFriend = Friend(
             friendKey,
@@ -74,6 +82,7 @@ contract Chat {
         userList[me].friendList.push(newFriend);
     }
 
+    // Internal function to remove a friend
     function _removeFriend(address me, address friendKey) internal {
         Friend[] storage friends = userList[me].friendList;
         for (uint256 i = 0; i < friends.length; i++) {
@@ -85,6 +94,7 @@ contract Chat {
         }
     }
 
+    // Internal function to generate a unique chat code
     function _getChatCode(
         address pubkey1,
         address pubkey2
@@ -95,10 +105,12 @@ contract Chat {
                 : keccak256(abi.encodePacked(pubkey2, pubkey1));
     }
 
+    // Function to check if a user exists
     function checkUserExists(address pubkey) public view returns (bool) {
         return existingUsers[pubkey];
     }
 
+    // Function to create a new user account
     function createAccount(
         string calldata name,
         string calldata ipfsHash
@@ -116,18 +128,21 @@ contract Chat {
         emit AccountCreated(msg.sender, byteName);
     }
 
+    // Function to get the username of a user
     function getUsername(
         address pubkey
     ) external view userExists(pubkey) returns (bytes32) {
         return userList[pubkey].name;
     }
 
+    // Function to get the profile picture of a user
     function getUserProfilePic(
         address pubkey
     ) external view userExists(pubkey) returns (string memory) {
         return userList[pubkey].ipfsHash;
     }
 
+    // Function to add a friend
     function addFriend(
         address friendKey,
         string calldata name
@@ -148,6 +163,7 @@ contract Chat {
         emit FriendAdded(msg.sender, friendKey);
     }
 
+    // Function to remove a friend
     function removeFriend(
         address friendKey
     ) external userExists(msg.sender) userExists(friendKey) {
@@ -163,6 +179,7 @@ contract Chat {
         emit FriendRemoved(msg.sender, friendKey);
     }
 
+    // Function to check if two users are already friends
     function checkAlreadyFriends(
         address pubkey1,
         address pubkey2
@@ -180,10 +197,12 @@ contract Chat {
         return false;
     }
 
+    // Function to get the friend list of the caller
     function getMyFriendList() external view returns (Friend[] memory) {
         return userList[msg.sender].friendList;
     }
 
+    // Function to send a message to a friend
     function sendMessage(
         address friendKey,
         string calldata _message
@@ -205,6 +224,7 @@ contract Chat {
         emit MessageSent(chatCode, newMessage);
     }
 
+    // Function to delete a message
     function deleteMessage(address friendKey, uint256 index) external {
         bytes32 chatCode = _getChatCode(msg.sender, friendKey);
         require(index < allMessages[chatCode].length, "Index out of bounds");
@@ -218,12 +238,14 @@ contract Chat {
         emit MessageDeleted(chatCode, index);
     }
 
+    // Function to read messages between the caller and a friend
     function readMessage(
         address friendKey
     ) external view returns (Message[] memory) {
         return allMessages[_getChatCode(msg.sender, friendKey)];
     }
 
+    // Function to get information about all app users
     function getAllAppUser() public view returns (AllUserStruct[] memory) {
         return allUsers;
     }
