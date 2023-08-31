@@ -6,11 +6,13 @@ contract Chat {
     struct User {
         bytes32 name;
         Friend[] friendList;
+        string ipfsHash; // This will store the IPFS hash of the profile picture
     }
 
     struct Friend {
         address pubkey;
         bytes32 name;
+        string ipfsHash;
     }
 
     struct Message {
@@ -23,6 +25,7 @@ contract Chat {
     struct AllUserStruct {
         bytes32 name;
         address accountAddress;
+        string ipfsHash;
     }
 
     AllUserStruct[] allUsers;
@@ -63,7 +66,11 @@ contract Chat {
     }
 
     function _addFriend(address me, address friendKey, bytes32 name) internal {
-        Friend memory newFriend = Friend(friendKey, name);
+        Friend memory newFriend = Friend(
+            friendKey,
+            name,
+            userList[friendKey].ipfsHash
+        );
         userList[me].friendList.push(newFriend);
     }
 
@@ -92,15 +99,19 @@ contract Chat {
         return existingUsers[pubkey];
     }
 
-    function createAccount(string calldata name) external {
+    function createAccount(
+        string calldata name,
+        string calldata ipfsHash
+    ) external {
         require(!checkUserExists(msg.sender), "User already exists");
 
         bytes32 byteName = _stringToBytes32(name);
         require(byteName != bytes32(0), "Username cannot be empty");
 
         userList[msg.sender].name = byteName;
+        userList[msg.sender].ipfsHash = ipfsHash; // Store the IPFS hash
         existingUsers[msg.sender] = true;
-        allUsers.push(AllUserStruct(byteName, msg.sender));
+        allUsers.push(AllUserStruct(byteName, msg.sender, ipfsHash));
 
         emit AccountCreated(msg.sender, byteName);
     }
@@ -109,6 +120,12 @@ contract Chat {
         address pubkey
     ) external view userExists(pubkey) returns (bytes32) {
         return userList[pubkey].name;
+    }
+
+    function getUserProfilePic(
+        address pubkey
+    ) external view userExists(pubkey) returns (string memory) {
+        return userList[pubkey].ipfsHash;
     }
 
     function addFriend(
