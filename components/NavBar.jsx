@@ -25,7 +25,8 @@ const NavBar = () => {
   const [openModel, setOpenModel] = useState(false);
 
   const { address, isConnected } = useAccount();
-  const { userName, createAccount } = useContext(ChatAppContext);
+  const { userName, createAccount, profilePicture } =
+    useContext(ChatAppContext);
   const { disconnect } = useDisconnect();
   const router = useRouter();
 
@@ -110,7 +111,12 @@ const NavBar = () => {
               >
                 {""}
                 <Image
-                  src={userName ? images.accountName : images.create2}
+                className="rounded-lg"
+                  src={
+                    userName
+                      ? `https://ipfs.io/ipfs/${profilePicture}`
+                      : images.create2
+                  }
                   alt="Account image"
                   width={20}
                   height={20}
@@ -125,7 +131,11 @@ const NavBar = () => {
               >
                 {""}
                 <Image
-                  src={userName ? images.accountName : images.create2}
+                  src={
+                    userName
+                      ? `https://ipfs.io/ipfs/${profilePicture}`
+                      : images.create2
+                  }
                   alt="Account image"
                   width={20}
                   height={20}
@@ -156,7 +166,8 @@ const NavBar = () => {
               info="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate maxime assumenda exercitationem voluptatibus, vero aliquid in tempore aut, impedit dolores voluptate recusandae nulla fuga? Praesentium iusto mollitia sint fugit! Placeat?"
               smallInfo="Secret Key is used to encrypt your messages. Please keep it safe."
               image={images.hero}
-              functionName={createAccount}
+              functionName={"createAccount"}
+              createAccount={createAccount}
               address={address}
             />
           }

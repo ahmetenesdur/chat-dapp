@@ -4,8 +4,6 @@ import { ethers } from "ethers";
 import { useRouter } from "next/navigation";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 
-import images from "../../public/assets";
-
 const Card = ({ readMessage, friends, i, readUser, removeFriend, clear }) => {
   const router = useRouter();
 
@@ -31,7 +29,11 @@ const Card = ({ readMessage, friends, i, readUser, removeFriend, clear }) => {
     <Link
       href={{
         pathname: "/",
-        query: { name: `${friends.name}`, address: `${friends.pubkey}` },
+        query: {
+          name: `${friends.name}`,
+          address: `${friends.pubkey}`,
+          ipfsHash: `${friends.ipfsHash}`,
+        },
       }}
     >
       <div
@@ -40,7 +42,7 @@ const Card = ({ readMessage, friends, i, readUser, removeFriend, clear }) => {
         <div className="flex items-center gap-4 cursor-pointer p-4 sm:px-8 border-b border-[#66b3e8] hover:bg-[#66b3e8]/50 hover:text-white">
           <div className="rounded-lg">
             <Image
-              src={images.accountName}
+              src={`https://ipfs.io/ipfs/${friends.ipfsHash}`}
               alt="username"
               width={50}
               height={50}

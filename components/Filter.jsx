@@ -45,7 +45,8 @@ const Filter = () => {
             info="Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sit doloribus quod vel expedita, dicta voluptatibus, nemo, deserunt minima quis recusandae porro officiis modi fugiat libero tempora corporis necessitatibus itaque!"
             smallInfo="Keep in touch with your friends and family."
             image={images.hero}
-            functionName={addFriends}
+            functionName={'addFriends'}
+            addFriends={addFriends}
           />
         </div>
       )}

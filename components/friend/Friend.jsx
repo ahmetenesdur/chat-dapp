@@ -24,6 +24,7 @@ const Friend = () => {
     readUser,
     search,
     clear,
+    profilePicture,
   } = useContext(ChatAppContext);
 
   const fromBytes32 = (bytes) => {
@@ -77,6 +78,7 @@ const Friend = () => {
             currentUserName={currentUserName}
             currentUserAddress={currentUserAddress}
             readUser={readUser}
+            profilePicture={profilePicture}
           />
         </div>
       </div>

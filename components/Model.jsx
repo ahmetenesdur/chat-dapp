@@ -4,6 +4,7 @@ import Image from "next/image";
 import images from "../public/assets";
 import { ChatAppContext } from "../context/ChatAppContext";
 import Loader from "./Loader";
+import saveToIPFS from "../utils/saveToIPFS";
 
 const Model = ({
   openBox,
@@ -14,11 +15,37 @@ const Model = ({
   smallInfo,
   image,
   functionName,
+  createAccount,
+  addFriends,
 }) => {
   const [name, setName] = useState("");
   const [userAddress, setUserAddress] = useState(address);
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [pictureLoading, setPictureLoading] = useState(false);
 
-  const { loading } = useContext(ChatAppContext);
+  const { loading, setLoading } = useContext(ChatAppContext);
+
+  const submit = async () => {
+    try {
+      if (functionName === "createAccount") {
+        setPictureLoading(true);
+        const picCid = await saveToIPFS(profilePicture);
+        setPictureLoading(false);
+        await createAccount({ name, picCid });
+      }
+      if (functionName === "addFriends") {
+        await addFriends({ userAddress, name });
+      }
+
+      if (!loading) {
+        openBox(false);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     // screen center model
@@ -36,10 +63,23 @@ const Model = ({
             <p>{info}</p>
             <small className="text-xl text-[#66b3e8]">{smallInfo}</small>
           </div>
-          {loading == true ? (
-            <Loader />
+          {loading || pictureLoading ? (
+            <Loader pictureLoading={pictureLoading} />
           ) : (
             <div>
+              {createAccount && (
+                <div className="flex items-center gap-4 p-4 rounded-lg sm:m-4 my-4 bg-black/25">
+                  <Image src={images.file} alt="user" width={30} height={30} />
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    accept="image/*"
+                    onChange={(e) => setProfilePicture(e.target.files[0])}
+                  />
+                </div>
+              )}
+
               <div className="flex items-center gap-4 p-4 rounded-lg sm:m-4 my-4 bg-black/25">
                 <Image
                   src={images.username}
@@ -50,7 +90,7 @@ const Model = ({
                 <input
                   className="w-[100%] bg-transparent text-white outline-none border-none"
                   type="text"
-                  placeholder="Enter Name here.."
+                  placeholder="Enter name here.."
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
@@ -68,12 +108,7 @@ const Model = ({
               <div className="grid grid-cols-1 z-50 sm:grid-cols-2 gap-4 sm:mx-4">
                 <button
                   className="outline-none border-none text-xl font-bold text-[#66b3e8] bg-black/25 p-4 border-2 rounded-lg flex items-center justify-center gap-4 cursor-pointer hover:bg-[#30556e] hover:text-white"
-                  onClick={async () => {
-                    await functionName({ name, userAddress });
-                    if (!loading) {
-                      openBox(false);
-                    }
-                  }}
+                  onClick={submit}
                 >
                   {""}
                   <Image src={images.send} alt="send" width={30} height={30} />

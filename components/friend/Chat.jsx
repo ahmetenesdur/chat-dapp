@@ -19,6 +19,7 @@ const Chat = ({
   currentUserName,
   currentUserAddress,
   readUser,
+  profilePicture,
 }) => {
   const bottomRef = useRef(null);
 
@@ -26,6 +27,7 @@ const Chat = ({
   const [chatData, setChatData] = useState({
     name: "",
     address: "",
+    ipfsHash: "",
   });
 
   const router = useRouter();
@@ -67,7 +69,13 @@ const Chat = ({
     <div className="p-4 sm:p-8 bg-black/25 rounded-lg ">
       {currentUserName && currentUserAddress ? (
         <div className="flex items-center gap-8 leading-none">
-          <Image src={images.accountName} alt="image" width={70} height={70} />
+          <Image
+            className="rounded-lg"
+            src={`https://ipfs.io/ipfs/${chatData.ipfsHash}`}
+            alt="image"
+            width={60}
+            height={60}
+          />
           <div>
             <p className="text-2xl">{currentUserName}</p>
             <p className="text-xs hidden">{currentUserAddress}</p>
@@ -87,9 +95,10 @@ const Chat = ({
               return (
                 <div ref={bottomRef} key={i + 1}>
                   {message.sender == chatData.address ? (
-                    <div className="flex items-center gap-4 text-base mt-1">
+                    <div className="flex items-center gap-4 text-base mt-4">
                       <Image
-                        src={images.accountName}
+                        className="rounded-[50%]"
+                        src={`https://ipfs.io/ipfs/${chatData.ipfsHash}`}
                         alt="image"
                         width={50}
                         height={50}
@@ -102,9 +111,10 @@ const Chat = ({
                       </span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-4 text-base mt-1 ">
+                    <div className="flex items-center gap-4 text-base mt-4 ">
                       <Image
-                        src={images.accountName}
+                        className="rounded-[50%]"
+                        src={`https://ipfs.io/ipfs/${profilePicture}`}
                         alt="image"
                         width={50}
                         height={50}

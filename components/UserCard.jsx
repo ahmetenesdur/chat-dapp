@@ -1,17 +1,15 @@
 import Image from "next/image";
 
-import images from "../public/assets";
-
 const UserCard = ({ users, i, addFriends }) => {
   return (
     <div className="bg-black/25 rounded-lg text-center p-4 mb-8 relative">
       <div className="items-center flex flex-col">
         <Image
-          className="rounded-[50%] mb-4"
-          src={images[`image${i + 1}`]}
-          alt="user"
-          width={100}
-          height={100}
+          className="rounded-lg mb-4"
+          src={`https://ipfs.io/ipfs/${users.ipfsHash}`}
+          alt="Profile Picture"
+          width={120}
+          height={120}
         />
 
         <div className="text-white">
