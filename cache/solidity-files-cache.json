@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/schwifty/workspace/chat-dapp/contracts/Chat.sol": {
-      "lastModificationDate": 1693442187617,
-      "contentHash": "e3c88baa1d99c9685073f7b21b4fe2d2",
+      "lastModificationDate": 1693486805616,
+      "contentHash": "82cc5a7625a4a998d1f58ef7ba1f7728",
       "sourceName": "contracts/Chat.sol",
       "solcConfig": {
         "version": "0.8.17",
