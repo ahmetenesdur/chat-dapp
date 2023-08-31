@@ -14,12 +14,12 @@ export const ChatAppProvider = ({ children }) => {
 
   // UseStates
   const [userName, setUserName] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
   const [friendLists, setFriendLists] = useState([]);
   const [friendMsg, setFriendMsg] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [search, setSearch] = useState("");
-
 
   // Current User Info
   const [currentUserName, setCurrentUserName] = useState("");
@@ -32,7 +32,9 @@ export const ChatAppProvider = ({ children }) => {
 
   // Convert bytes32 to string
   const fromBytes32 = (bytes) => {
-    return ethers.utils.parseBytes32String(bytes);
+    const result = ethers.utils.parseBytes32String(bytes);
+    console.log("fromBytes32 result:", result);
+    return result;
   };
 
   const clear = () => {
@@ -55,6 +57,9 @@ export const ChatAppProvider = ({ children }) => {
       const userName = await contract.getUsername(address);
       setUserName(fromBytes32(userName)); // This assumes you have a fromBytes32 utility function to convert bytes32 to string
 
+      const userPic = await contract.getUserProfilePic(address); // Get the profile picture from the smart contract
+      setProfilePicture(userPic); // Update the state with the retrieved profile picture
+
       const friendLists = await contract.getMyFriendList();
       setFriendLists(friendLists); // If the returned result is already an array of addresses
 
@@ -68,7 +73,6 @@ export const ChatAppProvider = ({ children }) => {
       });
       setUserLists(processedUserList);
     } catch (error) {
-      console.error(error);
       toast.error("Please create an account first");
     }
   }, [address, isConnected]);
@@ -98,20 +102,22 @@ export const ChatAppProvider = ({ children }) => {
   };
 
   // Create Account
-  const createAccount = async ({ name }) => {
-    if (!name || !address)
-      return toast.error("Please enter your name and connect to wallet");
+  const createAccount = async ({ name, picCid }) => {
+    if (!name || !address || !picCid)
+      // Check for picCid value too
+      return toast.error(
+        "Please enter your name, profile picture, and connect to wallet"
+      );
 
     try {
       const contract = getContract();
-      const getCreatedUser = await contract.createAccount(name); // Convert string to bytes32 before sending
+      const getCreatedUser = await contract.createAccount(name, picCid); // Pass the picCid to the smart contract method
       setLoading(true);
       await getCreatedUser.wait();
       setLoading(false);
       fetchData(); // Refresh data after creating an account.
       toast.success("Account Created Successfully");
     } catch (error) {
-      console.error(error);
       toast.error("Please try again later or connect to wallet");
     }
   };
@@ -142,7 +148,6 @@ export const ChatAppProvider = ({ children }) => {
       router.push("/");
       toast.success("Friend Added Successfully");
     } catch (error) {
-      console.error(error);
       toast.error(
         "Ensure this address has an account and hasn't been added as a friend already"
       );
@@ -175,7 +180,6 @@ export const ChatAppProvider = ({ children }) => {
       await readMessage(address);
       toast.success("Message Sent Successfully");
     } catch (error) {
-      console.error(error);
       toast.error("Something went wrong, please try again later");
     }
   };
@@ -217,11 +221,13 @@ export const ChatAppProvider = ({ children }) => {
         fromBytes32,
         clear,
         userName,
+        profilePicture,
         friendLists,
         friendMsg,
         setFriendMsg,
         userLists,
         loading,
+        setLoading,
         currentUserName,
         currentUserAddress,
         search,
