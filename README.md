@@ -134,12 +134,12 @@ With the Chat dApp, users can:
 
 Explore the dApp's visual appeal through these screenshots:
 
-![dApp Screenshot1](https://i.imgur.com/qNlEv39.png)
-![dApp Screenshot2](https://i.imgur.com/uhtYJDq.png)
-![dApp Screenshot3](https://i.imgur.com/xwieamY.png)
-![dApp Screenshot4](https://i.imgur.com/HitcW1a.png)
-![dApp Screenshot5](https://i.imgur.com/Ol2bTC5.png)
-![dApp Screenshot6](https://i.imgur.com/N5IzDwG.png)
+![dApp Screenshot1](https://i.imgur.com/pl0hWdl.png)
+![dApp Screenshot2](https://i.imgur.com/2sCXMvN.png)
+![dApp Screenshot3](https://i.imgur.com/KuDAy68.png)
+![dApp Screenshot4](https://i.imgur.com/RBuqnnW.png)
+![dApp Screenshot5](https://i.imgur.com/GiLmK0X.png)
+![dApp Screenshot6](https://i.imgur.com/ur2wHrS.png)
 
 <!-- LICENSE -->
 
